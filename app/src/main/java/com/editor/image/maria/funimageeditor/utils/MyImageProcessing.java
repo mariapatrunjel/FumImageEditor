@@ -103,12 +103,12 @@ public class MyImageProcessing {
 
     public static Mat rotateImage(Mat image,double alpha){
          Mat resultImage = new Mat(image.height(), image.width(), CvType.CV_8UC4);
-         rotate(image.getNativeObjAddr(),resultImage.getNativeObjAddr());
+         rotate(image.getNativeObjAddr(),resultImage.getNativeObjAddr(),alpha);
          return resultImage;
     }
     public static Mat flipImage(Mat image){
         Mat resultImage = new Mat(image.height(), image.width(), CvType.CV_8UC4);
-        flip(image.getNativeObjAddr(),resultImage.getNativeObjAddr(),alpha);
+        flip(image.getNativeObjAddr(),resultImage.getNativeObjAddr());
         return resultImage;
     }
 }
