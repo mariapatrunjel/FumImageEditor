@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    tools:context="com.editor.image.maria.funimageeditor.activities.SettingsActivity">
+
+    <TextView
+        android:id="@+id/redValue"
+        android:layout_width="40dp"
+        android:layout_height="33dp"
+        android:layout_marginStart="2dp"
+        android:text="@string/r"
+        android:textAlignment="center"
+        android:textColor="@android:color/holo_red_dark"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="20dp"
+        app:layout_constraintLeft_toRightOf="@+id/redBar"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"/>
+
+    <TextView
+        android:id="@+id/blueValue"
+        android:layout_width="40dp"
+        android:layout_height="33dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/b"
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toRightOf="@+id/blueBar"
+        app:layout_constraintTop_toBottomOf="@+id/greenValue"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"/>
+
+    <TextView
+        android:id="@+id/greenValue"
+        android:layout_width="40dp"
+        android:layout_height="33dp"
+        android:layout_marginStart="2dp"
+        android:text="@string/g"
+        android:textAlignment="center"
+        android:textColor="@android:color/holo_green_dark"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@+id/redValue"
+        app:layout_constraintLeft_toRightOf="@+id/greenBar"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"/>
+
+    <TextView
+        android:id="@+id/redText"
+        android:layout_width="30dp"
+        android:layout_height="33dp"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/r"
+        android:textAlignment="center"
+        android:textColor="@android:color/holo_red_dark"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/greenText"
+        android:layout_width="30dp"
+        android:layout_height="33dp"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/g"
+        android:textAlignment="center"
+        android:textColor="@android:color/holo_green_dark"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/redText"/>
+
+    <TextView
+        android:id="@+id/blueText"
+        android:layout_width="30dp"
+        android:layout_height="33dp"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/b"
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/greenText"/>
+
+    <SeekBar
+        android:id="@+id/redBar"
+        android:layout_width="290dp"
+        android:layout_height="33dp"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="20dp"
+        android:backgroundTint="@android:color/holo_red_dark"
+        android:max="50"
+        android:progressTint="@android:color/holo_red_dark"
+        android:thumbTint="@android:color/holo_red_dark"
+        app:layout_constraintLeft_toRightOf="@+id/redText"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <SeekBar
+        android:id="@+id/greenBar"
+        android:layout_width="290dp"
+        android:layout_height="33dp"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@android:color/holo_green_dark"
+        android:max="50"
+        android:progressTint="@android:color/holo_green_dark"
+        android:thumbTint="@android:color/holo_green_dark"
+        app:layout_constraintLeft_toRightOf="@+id/greenText"
+        app:layout_constraintTop_toBottomOf="@+id/redBar"
+        tools:thumbTint="@android:color/holo_green_dark"
+        tools:tickMark="@android:color/holo_green_dark"
+        />
+
+    <SeekBar
+        android:id="@+id/blueBar"
+        android:layout_width="290dp"
+        android:layout_height="33dp"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@color/colorPrimaryDark"
+        android:max="50"
+        android:progressTint="@color/colorPrimaryDark"
+        android:thumbTint="@color/colorPrimaryDark"
+        app:layout_constraintLeft_toRightOf="@+id/blueText"
+        app:layout_constraintTop_toBottomOf="@+id/greenBar"
+        />
+
+    <TextView
+        android:id="@+id/textBrightness"
+        android:layout_width="174dp"
+        android:layout_height="17dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="25dp"
+        android:text="@string/brightness"
+        android:textColor="@android:color/black"
+        app:layout_constraintHorizontal_bias="0.038"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/blueBar"/>
+
+    <SeekBar
+        android:id="@+id/brightnessBar"
+        android:layout_width="300dp"
+        android:layout_height="33dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="42dp"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@android:color/black"
+        android:max="40"
+        android:thumbTint="@android:color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textBrightness"
+        app:layout_constraintVertical_bias="0.0"/>
+
+    <Button
+        android:id="@+id/reset"
+        android:layout_width="122dp"
+        android:layout_height="36dp"
+        android:layout_marginStart="131dp"
+        android:layout_marginTop="28dp"
+        android:background="@color/colorAccent"
+        android:onClick="onClickResetButton"
+        android:text="@string/reset"
+        android:textColor="@color/colorPrimary"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/brightnessBar"/>
+
+
+
+</android.support.constraint.ConstraintLayout>
