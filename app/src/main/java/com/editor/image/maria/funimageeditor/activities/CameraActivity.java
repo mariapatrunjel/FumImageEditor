@@ -137,7 +137,7 @@ public class CameraActivity extends Activity implements CameraBridgeViewBase.CvC
     public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
 
         mRgba = inputFrame.rgba();
-        return MyImageProcessing.processImage(mRgba,currentFilter,redValue,greenValue,blueValue,brightness);
+        return  mRgba; //MyImageProcessing.processImage(mRgba,currentFilter,redValue,greenValue,blueValue,brightness);
     }
 
     @Override

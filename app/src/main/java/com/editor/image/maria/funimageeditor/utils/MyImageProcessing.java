@@ -1,8 +1,4 @@
 package com.editor.image.maria.funimageeditor.utils;
-import android.util.Log;
-
-import org.opencv.android.OpenCVLoader;
-import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.imgproc.Imgproc;
 
@@ -10,7 +6,7 @@ public class MyImageProcessing {
 
 
      static {
-         System.loadLibrary("MyOpencvLibs");
+          System.loadLibrary("MyOpencvLibs");
      }
 
      private static native void changeRGBChannels(long addrRgba, long addrResultImage, int red,int green,int blue);
@@ -26,9 +22,9 @@ public class MyImageProcessing {
      private static native void blueTonedFillter(long addrRgba, long addrResultImage, double alpha );
      private static native void newFilter(long addrRgba, long addrResultImage, double alpha);
 
-     private static native void rotate(long addrRgba, long addrResultImage, double alpha);
-     private static native void scale(long addrRgba, long addrResultImage, double alpha);
-     private static native void flip(long addrRgba, long addrResultImage);
+     private static native void rotate(long addrRgba, long addrResultImage, float alpha);
+     private static native void flipOrizontaly(long addrRgba, long addrResultImage);
+     private static native void flipVerticaly(long addrRgba, long addrResultImage);
 
      public static Mat processImage(Mat image, String currentFilter ,int redValue,int greenValue,int blueValue,float brightness){
           switch (currentFilter) {
@@ -65,7 +61,6 @@ public class MyImageProcessing {
                case "Winter":
                     colorMapFilter(image.getNativeObjAddr(), image.getNativeObjAddr(),0);
                     break;
-
                case "Pink":
                     colorMapFilter(image.getNativeObjAddr(), image.getNativeObjAddr(),1);
                     break;
@@ -78,7 +73,6 @@ public class MyImageProcessing {
                case "Ocean":
                     colorMapFilter(image.getNativeObjAddr(), image.getNativeObjAddr(),11);
                     break;
-
                case "HEqY":
                     histogramEqualizationYCbCr(image.getNativeObjAddr(), image.getNativeObjAddr(),0);
                     break;
@@ -101,43 +95,21 @@ public class MyImageProcessing {
      }
 
 
-    public static Mat rotateImage(Mat image,double alpha){
-         Mat resultImage = new Mat(image.height(), image.width(), CvType.CV_8UC4);
-         rotate(image.getNativeObjAddr(),resultImage.getNativeObjAddr(),alpha);
-         return resultImage;
-    }
-    public static Mat flipImage(Mat image){
-        Mat resultImage = new Mat(image.height(), image.width(), CvType.CV_8UC4);
-        flip(image.getNativeObjAddr(),resultImage.getNativeObjAddr());
-        return resultImage;
-    }
+     public static Mat rotateImage(Mat image,float alpha){
+          Mat resultImage = image.clone();
+          rotate(image.getNativeObjAddr(),resultImage.getNativeObjAddr(),alpha);
+          return resultImage;
+     }
+     public static Mat flipImageVerticaly(Mat image){
+          Mat resultImage = image.clone();
+          flipVerticaly(image.getNativeObjAddr(),resultImage.getNativeObjAddr());
+          return resultImage;
+     }
+     public static Mat flipImageOrizontaly(Mat image){
+          Mat resultImage = image.clone();
+          flipOrizontaly(image.getNativeObjAddr(),resultImage.getNativeObjAddr());
+          return resultImage;
+     }
+
+
 }
-
-
- /*
-               case "Rainbow":
-                    colorMapFilter(image.getNativeObjAddr(), image.getNativeObjAddr(),2);
-                    break;
-               case "Autumn":
-                    colorMapFilter(image.getNativeObjAddr(), image.getNativeObjAddr(),3);
-                    break;
-               case "Jet":
-                    colorMapFilter(image.getNativeObjAddr(), image.getNativeObjAddr(),4);
-                    break;
-               case "Summer":
-                    colorMapFilter(image.getNativeObjAddr(), image.getNativeObjAddr(),6);
-                    break;
-               case "Cool":
-                    colorMapFilter(image.getNativeObjAddr(), image.getNativeObjAddr(),7);
-                    break;
-               case "Spring":
-                    colorMapFilter(image.getNativeObjAddr(), image.getNativeObjAddr(),8);
-                    break;
-               case "HEqCr":
-                    histogramEqualizationYCbCr(image.getNativeObjAddr(), image.getNativeObjAddr(),2);
-                    break;
-               case "HEqH":
-                    histogramEqualizationHSV(image.getNativeObjAddr(),image.getNativeObjAddr(),0);
-                    break;
-
-*/

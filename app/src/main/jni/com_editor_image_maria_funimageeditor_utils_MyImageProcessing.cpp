@@ -246,6 +246,7 @@ JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageP
 
     }
 }
+
 JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageProcessing_greenTonedFillter
         (JNIEnv *, jclass, jlong addrRgba, jlong addrResultImage, jdouble alpha)
 {
@@ -283,14 +284,12 @@ JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageP
     Mat &mRgba = *(Mat *) addrRgba;
     Mat &resultImage = *(Mat *) addrResultImage;
     double u = ((alpha + 45) * M_PI) / 180;
-    double ax = cos(u);
-    double ay = sin(u);
 
     unsigned char lut[256];
     // Change with sin function
     for (int i = 0; i < 256; i++) {
         //double t = i/255.0f;
-        lut[i] = 255.0f * sin(i * M_PI / 510.0f);
+        lut[i] = (uchar) (255.0f * sin(i * M_PI / 510.0f));
         if (lut[i] < 0)
             lut[i] = 0;
         if (lut[i] > 255)
@@ -324,7 +323,7 @@ JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageP
               double xt = (-2 * t * t * t + 3 * t * t) * 255.0f + (t*t*t-2*t*t+t)*ax+(t*t*t-t*t)*bx;
               double yt = (-2 * t * t * t + 3 * t * t) * 255.0f + (t*t*t-2*t*t+t)*ay+(t*t*t-t*t)*by;
               if(xt+0.5 <256 )
-                  lut[(int)(xt+0.5)]=(int)(yt+0.5);
+                  lut[(int)(xt+0.5)]=(uchar)(yt+0.5);
           }
       for (int i = 0; i < mRgba.rows; i++) {
           for (int j = 0; j < mRgba.cols; j++) {
@@ -338,7 +337,7 @@ JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageP
 
 
 JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageProcessing_rotate
-        (JNIEnv *, jclass, jlong addrRgba, jlong addrResultImage, jdouble alpha)
+        (JNIEnv *, jclass, jlong addrRgba, jlong addrResultImage, jfloat alpha)
 {
     Mat &mRgba = *(Mat *) addrRgba;
     Mat &resultImage = *(Mat *) addrResultImage;
@@ -350,8 +349,8 @@ JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageP
                 double xc=(x-xCenter)*cos(alphaRad)+(y-yCenter)* sin(alphaRad) + xCenter;
                 double yc=-(x-xCenter)*sin(alphaRad)+(y-yCenter)* cos(alphaRad) + yCenter;
                 if(xc < mRgba.rows - 1 && xc>=0 && yc>=0 && yc<mRgba.cols-1 ){
-                    int x0 = xc;
-                    int y0 = yc;
+                    int x0 = (int) xc;
+                    int y0 = (int) yc;
 
                     //red
                     double f1r = mRgba.data[mRgba.step[0] * x0 + mRgba.step[1] * y0 + 0];
@@ -382,16 +381,16 @@ JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageP
 
 
 
-                    int i = x;
-                    int j = y;
-                    resultImage.data[resultImage.step[0] * i + resultImage.step[1] * j + 0] = fr;
-                    resultImage.data[resultImage.step[0] * i + resultImage.step[1] * j + 1] = fg;
-                    resultImage.data[resultImage.step[0] * i + resultImage.step[1] * j + 2] = fb;
+                    int i = (int) x;
+                    int j = (int) y;
+                    resultImage.data[resultImage.step[0] * i + resultImage.step[1] * j + 0] = (uchar) fr;
+                    resultImage.data[resultImage.step[0] * i + resultImage.step[1] * j + 1] = (uchar) fg;
+                    resultImage.data[resultImage.step[0] * i + resultImage.step[1] * j + 2] = (uchar) fb;
                 }
                 else
                 {
-                    int i = x;
-                    int j = y;
+                    int i = (int) x;
+                    int j = (int) y;
                     resultImage.data[resultImage.step[0] * i + resultImage.step[1] * j + 0] = 0;
                     resultImage.data[resultImage.step[0] * i + resultImage.step[1] * j + 1] = 0;
                     resultImage.data[resultImage.step[0] * i + resultImage.step[1] * j + 2] = 0;
@@ -401,32 +400,29 @@ JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageP
        }
 }
 
-JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageProcessing_scale
-        (JNIEnv *, jclass, jlong addrRgba, jlong addrResultImage, jdouble alpha)
-{
-    Mat &mRgba = *(Mat *) addrRgba;
-    Mat &resultImage = *(Mat *) addrResultImage;
 
-    /*resultImage = new QImage( factorScalare*initialImage->width(),factorScalare*initialImage->height(),QImage::Format_RGB888);
-        qDebug() << QString("x = %1 , y = %2").arg(factorScalare*initialImage->width()).arg(factorScalare*initialImage->height());
-        for(double x=0;x<factorScalare*initialImage->width();x++)
-            for(double y=0;y<factorScalare*initialImage->height();y++)
-            {
-                double xc=x/factorScalare;
-                double yc=y/factorScalare;
-                int x0 = xc;
-                int y0 = yc;
-                double f1 = qGray(initialImage->pixel(x0,y0));
-                double f2 = qGray(initialImage->pixel(x0+1,y0));;
-                double f3 = qGray(initialImage->pixel(x0,y0+1));;
-                double f4 = qGray(initialImage->pixel(x0+1,y0+1));;
-                double fy0 = (xc-x0)*(f2-f1)+f1;
-                double fy1 = (xc-x0)*(f4-f3)+f3;
-                double f = (yc-y0)*(fy1-fy0)+fy0;
-                int i = x;
-                int j = y;
-                modifiedImage->setPixel(i,j,qRgb(f,f,f));
+JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageProcessing_flipOrizontaly
+        (JNIEnv *, jclass, jlong addrRgba, jlong addrResultImage){
+        Mat &mRgba = *(Mat *) addrRgba;
+        Mat &resultImage = *(Mat *) addrResultImage;
+        for (int i = 0; i < mRgba.rows; i++)
+            for (int j = 0; j < mRgba.cols; j++) {
+                resultImage.data[resultImage.step[0] * (mRgba.rows - 1 - i) + resultImage.step[1] * j + 0] =  mRgba.data[mRgba.step[0] * i + mRgba.step[1] * j + 0];;
+                resultImage.data[resultImage.step[0] * (mRgba.rows - 1 - i) + resultImage.step[1] * j + 1] =  mRgba.data[mRgba.step[0] * i + mRgba.step[1] * j + 1];;
+                resultImage.data[resultImage.step[0] * (mRgba.rows - 1 - i) + resultImage.step[1] * j + 2] =  mRgba.data[mRgba.step[0] * i + mRgba.step[1] * j + 2];;
             }
-        return modifiedImage;
-    */
 }
+
+
+JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageProcessing_flipVerticaly
+        (JNIEnv *, jclass, jlong addrRgba, jlong addrResultImage){
+        Mat &mRgba = *(Mat *) addrRgba;
+        Mat &resultImage = *(Mat *) addrResultImage;
+        for (int i = 0; i < mRgba.rows; i++)
+            for (int j = 0; j < mRgba.cols; j++) {
+                resultImage.data[resultImage.step[0] * i + resultImage.step[1] * (mRgba.cols - 1 - j) + 0] =  mRgba.data[mRgba.step[0] * i + mRgba.step[1] * j + 0];
+                resultImage.data[resultImage.step[0] * i + resultImage.step[1] * (mRgba.cols - 1 - j) + 1] =  mRgba.data[mRgba.step[0] * i + mRgba.step[1] * j + 1];
+                resultImage.data[resultImage.step[0] * i + resultImage.step[1] * (mRgba.cols - 1 - j) + 2] =  mRgba.data[mRgba.step[0] * i + mRgba.step[1] * j + 2];
+            }
+}
+

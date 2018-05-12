@@ -8,11 +8,16 @@ public class EditViewRetainedFragment extends Fragment
 {
     // data object we want to retain
     private Bitmap image;
+    private Bitmap initialImage;
     private String filter;
     private Integer redValue,greenValue,blueValue;
     private Float brightness;
     private String menuView;
-    private Double rotationAlp;
+
+    private Float rotation = 0.0f;
+    private Boolean flipedVerticaly = false, flipedOrizontaly = false;
+
+
 
     // this method is only called once for this fragment
     @Override
@@ -20,6 +25,7 @@ public class EditViewRetainedFragment extends Fragment
         super.onCreate(savedInstanceState);
         // retain this fragment
         setRetainInstance(true);
+
     }
 
     public Bitmap getImage(){
@@ -28,6 +34,14 @@ public class EditViewRetainedFragment extends Fragment
 
     public void setImage(Bitmap image){
         this.image = image;
+    }
+
+    public Bitmap getInitialImage() {
+        return initialImage;
+    }
+
+    public void setInitialImage(Bitmap initialImage) {
+        this.initialImage = initialImage;
     }
 
     public String getFilter() {
@@ -78,6 +92,27 @@ public class EditViewRetainedFragment extends Fragment
         this.menuView = menuView;
 }
 
+    public Float getRotation() {
+        return rotation;
+    }
 
+    public void setRotation(Float rotation) {
+        this.rotation = rotation;
+    }
 
+    public Boolean getFlipedVerticaly() {
+        return flipedVerticaly;
+    }
+
+    public void setFlipedVerticaly(Boolean flipedVerticaly) {
+        this.flipedVerticaly = flipedVerticaly;
+    }
+
+    public Boolean getFlipedOrizontaly() {
+        return flipedOrizontaly;
+    }
+
+    public void setFlipedOrizontaly(Boolean flipedOrizontaly) {
+        this.flipedOrizontaly = flipedOrizontaly;
+    }
 }

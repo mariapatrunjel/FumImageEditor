@@ -194,6 +194,63 @@
                     android:onClick="onBrightnessViewClicked"
                     android:scaleType="fitXY"
                     android:src="@drawable/brightness_view"/>
+
+                <ImageButton
+                    android:id="@+id/flipOrizontalyButton"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:adjustViewBounds="true"
+                    android:background="#00000000"
+                    android:contentDescription="@null"
+                    android:cropToPadding="false"
+                    android:onClick="onFlipOrizontalyClicked"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/flip_orizontaly"/>
+
+                <ImageButton
+                    android:id="@+id/flipVerticalyButton"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:adjustViewBounds="true"
+                    android:background="#00000000"
+                    android:contentDescription="@null"
+                    android:cropToPadding="false"
+                    android:onClick="onFlipVerticalyClicked"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/flip_verticaly"/>
+
+                <ImageButton
+                    android:id="@+id/rotateLeftButton"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:adjustViewBounds="true"
+                    android:background="#00000000"
+                    android:contentDescription="@null"
+                    android:cropToPadding="false"
+                    android:onClick="onRotateLeftClicked"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/rotate_left"/>
+
+                <ImageButton
+                    android:id="@+id/rotateRghttButton"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:adjustViewBounds="true"
+                    android:background="#00000000"
+                    android:contentDescription="@null"
+                    android:cropToPadding="false"
+                    android:onClick="onRotateRightClicked"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/rotate_right"/>
+
             </LinearLayout>
         </HorizontalScrollView>
 
@@ -350,7 +407,6 @@
                     android:scaleType="fitXY"
                     android:src="@drawable/hot_filter"/>
 
-
                 <ImageButton
                     android:id="@+id/boneFilterButton"
                     android:layout_width="60dp"
@@ -490,7 +546,6 @@
                     android:onClick="onMagentaFilterClicked"
                     android:scaleType="fitXY"
                     android:src="@drawable/magenta_filter"/>
-
 
             </LinearLayout>
         </HorizontalScrollView>

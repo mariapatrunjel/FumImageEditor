@@ -115,18 +115,26 @@ JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageP
 /*
  * Class:     com_editor_image_maria_funimageeditor_utils_MyImageProcessing
  * Method:    rotate
- * Signature: (JJD)V
+ * Signature: (JJF)V
  */
 JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageProcessing_rotate
-  (JNIEnv *, jclass, jlong, jlong, jdouble);
+  (JNIEnv *, jclass, jlong, jlong, jfloat);
 
 /*
  * Class:     com_editor_image_maria_funimageeditor_utils_MyImageProcessing
- * Method:    scale
- * Signature: (JJD)V
+ * Method:    flipOrizontaly
+ * Signature: (JJ)V
  */
-JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageProcessing_scale
-  (JNIEnv *, jclass, jlong, jlong, jdouble);
+JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageProcessing_flipOrizontaly
+  (JNIEnv *, jclass, jlong, jlong);
+
+/*
+ * Class:     com_editor_image_maria_funimageeditor_utils_MyImageProcessing
+ * Method:    flipVerticaly
+ * Signature: (JJ)V
+ */
+JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageProcessing_flipVerticaly
+  (JNIEnv *, jclass, jlong, jlong);
 
 #ifdef __cplusplus
 }
