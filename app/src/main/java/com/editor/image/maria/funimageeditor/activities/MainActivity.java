@@ -307,6 +307,23 @@ public class MainActivity extends Activity {
 
     }
 
+    //Apasare rotate 90 left
+    public void onRotate90LeftClicked(View view){
+        rotation = (rotation + 90.0f) % 360.0f;
+        mRetainedFragment.setRotation(rotation);
+        changeTransformedPicture();
+    }
+
+    //Apasare rotate 90 right
+    public void onRotate90RightClicked(View view){
+        rotation = (rotation - 90.0f ) % 360.0f;
+        if(rotation < 0.0f )
+            rotation = 360.0f + rotation ;
+        mRetainedFragment.setRotation(rotation);
+        changeTransformedPicture();
+
+    }
+
     // Scimba poza
     private void changeModifiedPicture(){
         if(currentImage!=null)

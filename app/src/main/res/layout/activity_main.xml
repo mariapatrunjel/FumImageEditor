@@ -110,6 +110,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0"
         android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         app:layout_constraintLeft_toLeftOf="parent">
 
@@ -238,7 +239,7 @@
                     android:src="@drawable/rotate_left"/>
 
                 <ImageButton
-                    android:id="@+id/rotateRghttButton"
+                    android:id="@+id/rotateRightButton"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_marginLeft="8dp"
@@ -250,6 +251,34 @@
                     android:onClick="onRotateRightClicked"
                     android:scaleType="fitXY"
                     android:src="@drawable/rotate_right"/>
+
+                <ImageButton
+                    android:id="@+id/rotate90LeftButton"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:adjustViewBounds="true"
+                    android:background="#00000000"
+                    android:contentDescription="@null"
+                    android:cropToPadding="false"
+                    android:onClick="onRotate90LeftClicked"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/rotate_90_left"/>
+
+                <ImageButton
+                    android:id="@+id/rotate90RightButton"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:adjustViewBounds="true"
+                    android:background="#00000000"
+                    android:contentDescription="@null"
+                    android:cropToPadding="false"
+                    android:onClick="onRotate90RightClicked"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/rotate_90_right"/>
 
             </LinearLayout>
         </HorizontalScrollView>
