@@ -337,15 +337,16 @@ JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageP
 
 
 JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageProcessing_rotate
-        (JNIEnv *, jclass, jlong addrRgba, jlong addrResultImage, jfloat alpha)
+        (JNIEnv *, jclass, jlong addrRgba, jlong addrResultImage, jfloat alpha, jint newWidth, jint newHeight)
+
 {
     Mat &mRgba = *(Mat *) addrRgba;
     Mat &resultImage = *(Mat *) addrResultImage;
     double xCenter = mRgba.rows / 2;
     double yCenter = mRgba.cols / 2;
     double alphaRad = alpha * M_PI / 180.0;
-    for (double x = 0; x < mRgba.rows; x++) {
-         for (double y = 0; y < mRgba.cols; y++) {
+    for (double x = 0; x < newWidth; x++) {
+         for (double y = 0; y < newHeight; y++) {
                 double xc=(x-xCenter)*cos(alphaRad)+(y-yCenter)* sin(alphaRad) + xCenter;
                 double yc=-(x-xCenter)*sin(alphaRad)+(y-yCenter)* cos(alphaRad) + yCenter;
                 if(xc < mRgba.rows - 1 && xc>=0 && yc>=0 && yc<mRgba.cols-1 ){
