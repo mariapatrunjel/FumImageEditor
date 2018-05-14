@@ -337,19 +337,20 @@ JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageP
 
 
 JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageProcessing_rotate
-        (JNIEnv *, jclass, jlong addrRgba, jlong addrResultImage, jfloat alpha, jint newWidth, jint newHeight)
+        (JNIEnv *, jclass, jlong addrRgba, jlong addrResultImage, jdouble alpha)
 
 {
     Mat &mRgba = *(Mat *) addrRgba;
     Mat &resultImage = *(Mat *) addrResultImage;
-    double xCenter = mRgba.rows / 2;
-    double yCenter = mRgba.cols / 2;
+    double xCenter = mRgba.rows / 2.0;
+    double yCenter = mRgba.cols / 2.0;
     double alphaRad = alpha * M_PI / 180.0;
-    for (double x = 0; x < newWidth; x++) {
-         for (double y = 0; y < newHeight; y++) {
+
+    for (double x = 0; x < resultImage.rows ; x++) {
+         for (double y = 0; y < resultImage.cols; y++) {
                 double xc=(x-xCenter)*cos(alphaRad)+(y-yCenter)* sin(alphaRad) + xCenter;
                 double yc=-(x-xCenter)*sin(alphaRad)+(y-yCenter)* cos(alphaRad) + yCenter;
-                if(xc < mRgba.rows - 1 && xc>=0 && yc>=0 && yc<mRgba.cols-1 ){
+                if(xc < mRgba.rows - 1.0 && xc>=0.0 && yc>=0.0 && yc<mRgba.cols-1.0 ){
                     int x0 = (int) xc;
                     int y0 = (int) yc;
 
@@ -372,14 +373,22 @@ JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageP
                     double fg = (yc-y0)*(fy1g-fy0g)+fy0g;
 
                      //blue
-                     double f1b = mRgba.data[mRgba.step[0] * x0 + mRgba.step[1] * y0 + 2];
-                     double f2b = mRgba.data[mRgba.step[0] * (x0+1) + mRgba.step[1] * y0 + 2];
-                     double f3b = mRgba.data[mRgba.step[0] * x0 + mRgba.step[1] * (y0+1) + 2];
-                     double f4b = mRgba.data[mRgba.step[0] * (x0+1) + mRgba.step[1] * (y0+1) + 2];
-                     double fy0b = (xc-x0)*(f2b-f1b)+f1b;
-                     double fy1b = (xc-x0)*(f4b-f3b)+f3b;
-                     double fb = (yc-y0)*(fy1b-fy0b)+fy0b;
+                    double f1b = mRgba.data[mRgba.step[0] * x0 + mRgba.step[1] * y0 + 2];
+                    double f2b = mRgba.data[mRgba.step[0] * (x0+1) + mRgba.step[1] * y0 + 2];
+                    double f3b = mRgba.data[mRgba.step[0] * x0 + mRgba.step[1] * (y0+1) + 2];
+                    double f4b = mRgba.data[mRgba.step[0] * (x0+1) + mRgba.step[1] * (y0+1) + 2];
+                    double fy0b = (xc-x0)*(f2b-f1b)+f1b;
+                    double fy1b = (xc-x0)*(f4b-f3b)+f3b;
+                    double fb = (yc-y0)*(fy1b-fy0b)+fy0b;
 
+
+                    double f1br = mRgba.data[mRgba.step[0] * x0 + mRgba.step[1] * y0 + 3];
+                    double f2br = mRgba.data[mRgba.step[0] * (x0+1) + mRgba.step[1] * y0 + 3];
+                    double f3br = mRgba.data[mRgba.step[0] * x0 + mRgba.step[1] * (y0+1) + 3];
+                    double f4br = mRgba.data[mRgba.step[0] * (x0+1) + mRgba.step[1] * (y0+1) + 3];
+                    double fy0br = (xc-x0)*(f2br-f1br)+f1br;
+                    double fy1br = (xc-x0)*(f4br-f3br)+f3br;
+                    double fbr = (yc-y0)*(fy1br-fy0br)+fy0br;
 
 
                     int i = (int) x;
@@ -387,6 +396,7 @@ JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageP
                     resultImage.data[resultImage.step[0] * i + resultImage.step[1] * j + 0] = (uchar) fr;
                     resultImage.data[resultImage.step[0] * i + resultImage.step[1] * j + 1] = (uchar) fg;
                     resultImage.data[resultImage.step[0] * i + resultImage.step[1] * j + 2] = (uchar) fb;
+                    resultImage.data[resultImage.step[0] * i + resultImage.step[1] * j + 3] = (uchar) fbr;
                 }
                 else
                 {
@@ -395,7 +405,7 @@ JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageP
                     resultImage.data[resultImage.step[0] * i + resultImage.step[1] * j + 0] = 0;
                     resultImage.data[resultImage.step[0] * i + resultImage.step[1] * j + 1] = 0;
                     resultImage.data[resultImage.step[0] * i + resultImage.step[1] * j + 2] = 0;
-
+                    resultImage.data[resultImage.step[0] * i + resultImage.step[1] * j + 3] = 255;
                 }
             }
        }
@@ -408,9 +418,10 @@ JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageP
         Mat &resultImage = *(Mat *) addrResultImage;
         for (int i = 0; i < mRgba.rows; i++)
             for (int j = 0; j < mRgba.cols; j++) {
-                resultImage.data[resultImage.step[0] * (mRgba.rows - 1 - i) + resultImage.step[1] * j + 0] =  mRgba.data[mRgba.step[0] * i + mRgba.step[1] * j + 0];;
-                resultImage.data[resultImage.step[0] * (mRgba.rows - 1 - i) + resultImage.step[1] * j + 1] =  mRgba.data[mRgba.step[0] * i + mRgba.step[1] * j + 1];;
-                resultImage.data[resultImage.step[0] * (mRgba.rows - 1 - i) + resultImage.step[1] * j + 2] =  mRgba.data[mRgba.step[0] * i + mRgba.step[1] * j + 2];;
+                resultImage.data[resultImage.step[0] * (mRgba.rows - 1 - i) + resultImage.step[1] * j + 0] =  mRgba.data[mRgba.step[0] * i + mRgba.step[1] * j + 0];
+                resultImage.data[resultImage.step[0] * (mRgba.rows - 1 - i) + resultImage.step[1] * j + 1] =  mRgba.data[mRgba.step[0] * i + mRgba.step[1] * j + 1];
+                resultImage.data[resultImage.step[0] * (mRgba.rows - 1 - i) + resultImage.step[1] * j + 2] =  mRgba.data[mRgba.step[0] * i + mRgba.step[1] * j + 2];
+                resultImage.data[resultImage.step[0] * (mRgba.rows - 1 - i) + resultImage.step[1] * j + 3] =  mRgba.data[mRgba.step[0] * i + mRgba.step[1] * j + 3];
             }
 }
 
@@ -424,6 +435,7 @@ JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageP
                 resultImage.data[resultImage.step[0] * i + resultImage.step[1] * (mRgba.cols - 1 - j) + 0] =  mRgba.data[mRgba.step[0] * i + mRgba.step[1] * j + 0];
                 resultImage.data[resultImage.step[0] * i + resultImage.step[1] * (mRgba.cols - 1 - j) + 1] =  mRgba.data[mRgba.step[0] * i + mRgba.step[1] * j + 1];
                 resultImage.data[resultImage.step[0] * i + resultImage.step[1] * (mRgba.cols - 1 - j) + 2] =  mRgba.data[mRgba.step[0] * i + mRgba.step[1] * j + 2];
+                resultImage.data[resultImage.step[0] * i + resultImage.step[1] * (mRgba.cols - 1 - j) + 3] =  mRgba.data[mRgba.step[0] * i + mRgba.step[1] * j + 3];
             }
 }
 

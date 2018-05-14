@@ -115,10 +115,10 @@ JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageP
 /*
  * Class:     com_editor_image_maria_funimageeditor_utils_MyImageProcessing
  * Method:    rotate
- * Signature: (JJFII)V
+ * Signature: (JJD)V
  */
 JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageProcessing_rotate
-  (JNIEnv *, jclass, jlong, jlong, jfloat, jint, jint);
+  (JNIEnv *, jclass, jlong, jlong, jdouble);
 
 /*
  * Class:     com_editor_image_maria_funimageeditor_utils_MyImageProcessing

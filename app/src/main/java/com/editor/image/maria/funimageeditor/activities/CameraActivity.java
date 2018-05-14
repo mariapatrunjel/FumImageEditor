@@ -203,6 +203,11 @@ public class CameraActivity extends Activity implements CameraBridgeViewBase.CvC
             MyImageProcessing.changeRGBChannels(mRgba.getNativeObjAddr(),mRgba.getNativeObjAddr(),redValue,greenValue,blueValue);
         if(brightness != 1.0f)
             MyImageProcessing.gammaCorrection(mRgba.getNativeObjAddr(),mRgba.getNativeObjAddr(),brightness);
+        if(cameraId == 1) {
+            Mat resultImage = mRgba.clone();
+            MyImageProcessing.flipOrizontaly(mRgba.getNativeObjAddr(), resultImage.getNativeObjAddr());
+            return resultImage;        }
+
         return mRgba;
     }
 
