@@ -122,18 +122,18 @@ JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageP
 
 /*
  * Class:     com_editor_image_maria_funimageeditor_utils_MyImageProcessing
- * Method:    flipOrizontaly
+ * Method:    flipHorizontally
  * Signature: (JJ)V
  */
-JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageProcessing_flipOrizontaly
+JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageProcessing_flipHorizontally
   (JNIEnv *, jclass, jlong, jlong);
 
 /*
  * Class:     com_editor_image_maria_funimageeditor_utils_MyImageProcessing
- * Method:    flipVerticaly
+ * Method:    flipVertically
  * Signature: (JJ)V
  */
-JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageProcessing_flipVerticaly
+JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageProcessing_flipVertically
   (JNIEnv *, jclass, jlong, jlong);
 
 #ifdef __cplusplus

@@ -205,8 +205,9 @@ public class CameraActivity extends Activity implements CameraBridgeViewBase.CvC
             MyImageProcessing.gammaCorrection(mRgba.getNativeObjAddr(),mRgba.getNativeObjAddr(),brightness);
         if(cameraId == 1) {
             Mat resultImage = mRgba.clone();
-            MyImageProcessing.flipOrizontaly(mRgba.getNativeObjAddr(), resultImage.getNativeObjAddr());
-            return resultImage;        }
+            MyImageProcessing.flipHorizontally(mRgba.getNativeObjAddr(), resultImage.getNativeObjAddr());
+            return resultImage;
+        }
 
         return mRgba;
     }
@@ -251,10 +252,6 @@ public class CameraActivity extends Activity implements CameraBridgeViewBase.CvC
 
     public void onSepiaFilterClicked(View view) {
         changeFilter("Sepia");
-    }
-
-    public void onCartoonFilterClicked(View view) {
-        changeFilter("Cartoon");
     }
 
     public void onSketchFilterClicked(View view) {

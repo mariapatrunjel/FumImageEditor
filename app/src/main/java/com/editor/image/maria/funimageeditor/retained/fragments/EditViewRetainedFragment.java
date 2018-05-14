@@ -15,7 +15,7 @@ public class EditViewRetainedFragment extends Fragment
     private String menuView;
 
     private Float rotation = 0.0f;
-    private Boolean flipedVerticaly = false, flipedOrizontaly = false;
+    private Boolean flippedVertically = false, flippedHorizontally = false;
 
 
 
@@ -100,19 +100,19 @@ public class EditViewRetainedFragment extends Fragment
         this.rotation = rotation;
     }
 
-    public Boolean getFlipedVerticaly() {
-        return flipedVerticaly;
+    public Boolean getFlippedVertically() {
+        return flippedVertically;
     }
 
-    public void setFlipedVerticaly(Boolean flipedVerticaly) {
-        this.flipedVerticaly = flipedVerticaly;
+    public void setFlippedVertically(Boolean flippedVertically) {
+        this.flippedVertically = flippedVertically;
     }
 
-    public Boolean getFlipedOrizontaly() {
-        return flipedOrizontaly;
+    public Boolean getFlippedHorizontally() {
+        return flippedHorizontally;
     }
 
-    public void setFlipedOrizontaly(Boolean flipedOrizontaly) {
-        this.flipedOrizontaly = flipedOrizontaly;
+    public void setFlippedHorizontally(Boolean flippedHorizontally) {
+        this.flippedHorizontally = flippedHorizontally;
     }
 }

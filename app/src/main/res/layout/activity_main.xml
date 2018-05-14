@@ -197,7 +197,7 @@
                     android:src="@drawable/brightness_view"/>
 
                 <ImageButton
-                    android:id="@+id/flipOrizontalyButton"
+                    android:id="@+id/flipOrizontallyButton"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_marginLeft="8dp"
@@ -206,12 +206,12 @@
                     android:background="#00000000"
                     android:contentDescription="@null"
                     android:cropToPadding="false"
-                    android:onClick="onFlipOrizontalyClicked"
+                    android:onClick="onFlipHorizontallyClicked"
                     android:scaleType="fitXY"
-                    android:src="@drawable/flip_orizontaly"/>
+                    android:src="@drawable/flip_horizontally"/>
 
                 <ImageButton
-                    android:id="@+id/flipVerticalyButton"
+                    android:id="@+id/flipVerticallyButton"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_marginLeft="8dp"
@@ -220,9 +220,9 @@
                     android:background="#00000000"
                     android:contentDescription="@null"
                     android:cropToPadding="false"
-                    android:onClick="onFlipVerticalyClicked"
+                    android:onClick="onFlipVerticallyClicked"
                     android:scaleType="fitXY"
-                    android:src="@drawable/flip_verticaly"/>
+                    android:src="@drawable/flip_vertically"/>
 
                 <ImageButton
                     android:id="@+id/rotateLeftButton"

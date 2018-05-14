@@ -412,7 +412,7 @@ JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageP
 }
 
 
-JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageProcessing_flipOrizontaly
+JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageProcessing_flipHorizontally
         (JNIEnv *, jclass, jlong addrRgba, jlong addrResultImage){
         Mat &mRgba = *(Mat *) addrRgba;
         Mat &resultImage = *(Mat *) addrResultImage;
@@ -426,7 +426,7 @@ JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageP
 }
 
 
-JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageProcessing_flipVerticaly
+JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageProcessing_flipVertically
         (JNIEnv *, jclass, jlong addrRgba, jlong addrResultImage){
         Mat &mRgba = *(Mat *) addrRgba;
         Mat &resultImage = *(Mat *) addrResultImage;

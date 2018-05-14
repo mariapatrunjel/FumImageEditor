@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.editor.image.maria.funimageeditor.retained.fragments.EditViewRetainedFragment;
 import com.editor.image.maria.funimageeditor.utils.ColorTransform;
+import com.editor.image.maria.funimageeditor.utils.GeometricTransform;
 import com.editor.image.maria.funimageeditor.utils.Modifier;
 import com.editor.image.maria.funimageeditor.utils.ModifiersList;
 import com.editor.image.maria.funimageeditor.utils.MyImageProcessing;
@@ -48,7 +49,7 @@ public class MainActivity extends Activity {
     private Float brightness = 1.0f;
 
     private Float rotation = 0.0f;
-    private Boolean flipedVerticaly = false, flipedOrizontaly = false;
+    private Boolean flippedVertically = false, flippedHorizontally = false;
 
     private static final String TAG_RETAINED_FRAGMENT = "EditViewRetainedFragment";
     private EditViewRetainedFragment mRetainedFragment;
@@ -203,6 +204,7 @@ public class MainActivity extends Activity {
         toast.show();
     }
 
+
     // Apasare menu filters
     public void onFiltersViewClicked(View view){
         currentView = "FiltersView";
@@ -214,11 +216,15 @@ public class MainActivity extends Activity {
     private void changeFilter(String filterName){
         currentFilter = filterName;
         mRetainedFragment.setFilter(currentFilter);
+
+        changeModifiedPicture();
+
         modifierList.insert(new Modifier("Filter",filterName));
         ImageButton undo = findViewById(R.id.undo);
         undo.setVisibility(View.VISIBLE);
-        changeModifiedPicture();
+
     }
+
 
     // Apasare menu culori
     public void onPalletViewClicked(View view){
@@ -234,12 +240,14 @@ public class MainActivity extends Activity {
         changeView();
     }
 
-    // Apsare back din orice menu
+
+    // Apasare back din orice menu
     public void onBackToMainMenuClicked(View view){
         currentView = "MenuView";
         mRetainedFragment.setMenuView(currentView);
         changeView();
     }
+
 
     // Schimbare view de la menu
     private void changeView(){
@@ -276,25 +284,39 @@ public class MainActivity extends Activity {
 
     }
 
+
     //Apasare flip vertical
-    public void onFlipVerticalyClicked(View view) {
-        flipedVerticaly = !flipedVerticaly;
-        mRetainedFragment.setFlipedOrizontaly(flipedVerticaly);
+    public void onFlipVerticallyClicked(View view) {
+        flippedVertically = !flippedVertically;
+        mRetainedFragment.setFlippedHorizontally(flippedVertically);
+
         changeTransformedPicture();
+
+        modifierList.insert(new Modifier("FlippedVertically",flippedVertically.toString()));
+        ImageButton undo = findViewById(R.id.undo);
+        undo.setVisibility(View.VISIBLE);
+
+
     }
 
     //Apasare flip orizontal
-    public void onFlipOrizontalyClicked(View view){
-        flipedOrizontaly = !flipedOrizontaly;
-        mRetainedFragment.setFlipedOrizontaly(flipedOrizontaly);
+    public void onFlipHorizontallyClicked(View view){
+        flippedHorizontally = !flippedHorizontally;
+        mRetainedFragment.setFlippedHorizontally(flippedHorizontally);
+
         changeTransformedPicture();
+
+        modifierList.insert(new Modifier("FlippedHorizontally",flippedHorizontally.toString()));
+        ImageButton undo = findViewById(R.id.undo);
+        undo.setVisibility(View.VISIBLE);
+
+
     }
 
     //Apasare rotate left
     public void onRotateLeftClicked(View view){
         rotation = (rotation + 15.0f) % 360.0f;
-        mRetainedFragment.setRotation(rotation);
-        changeTransformedPicture();
+        changeRotate();
     }
 
     //Apasare rotate right
@@ -302,16 +324,13 @@ public class MainActivity extends Activity {
         rotation = (rotation - 15.0f ) % 360.0f;
         if(rotation < 0.0f )
             rotation = 360.0f + rotation ;
-        mRetainedFragment.setRotation(rotation);
-        changeTransformedPicture();
-
+        changeRotate();
     }
 
     //Apasare rotate 90 left
     public void onRotate90LeftClicked(View view){
         rotation = (rotation + 90.0f) % 360.0f;
-        mRetainedFragment.setRotation(rotation);
-        changeTransformedPicture();
+        changeRotate();
     }
 
     //Apasare rotate 90 right
@@ -319,11 +338,53 @@ public class MainActivity extends Activity {
         rotation = (rotation - 90.0f ) % 360.0f;
         if(rotation < 0.0f )
             rotation = 360.0f + rotation ;
-        mRetainedFragment.setRotation(rotation);
-        changeTransformedPicture();
-
+        changeRotate();
     }
 
+    private void changeRotate(){
+        mRetainedFragment.setRotation(rotation);
+
+        changeTransformedPicture();
+
+        modifierList.insert(new Modifier("Rotation",rotation.toString()));
+        ImageButton undo = findViewById(R.id.undo);
+        undo.setVisibility(View.VISIBLE);
+    }
+
+
+    // Undo
+    public void onUndoClicked(View view){
+        if(!modifierList.isEmpty()){
+
+            if(modifierList.lastIsATransformModifier()){
+                modifierList.delete();
+                GeometricTransform geometricTransform = modifierList.getLastGeometricTransform();
+                rotation = geometricTransform.getRotation();
+                flippedHorizontally = geometricTransform.getFlippedHorizontally();
+                flippedVertically = geometricTransform.getFlippedVertically();
+                setModifiers();
+                changeTransformedPicture();
+            }
+            else {
+                modifierList.delete();
+                ColorTransform colorTransform = modifierList.getLastColorTransform();
+                currentFilter = colorTransform.getFilter();
+                redValue = colorTransform.getRedValue();
+                greenValue = colorTransform.getGreenValue();
+                blueValue = colorTransform.getBlueValue();
+                brightness = colorTransform.getBrightness();
+                setModifiers();
+                changeModifiedPicture();
+                changeSeekBars();
+            }
+
+        }
+
+        if(modifierList.isEmpty()){
+            ImageButton undo = findViewById(R.id.undo);
+            undo.setVisibility(View.GONE);
+        }
+    }
     // Scimba poza
     private void changeModifiedPicture(){
         if(currentImage!=null)
@@ -332,8 +393,9 @@ public class MainActivity extends Activity {
     // Transforma poza
     private void changeTransformedPicture(){
         if(initialImage!=null)
-            new TransformImage().execute(rotation.toString(),flipedVerticaly.toString(),flipedOrizontaly.toString());
+            new TransformImage().execute(rotation.toString(),flippedVertically.toString(),flippedHorizontally.toString());
     }
+
 
 
     // Schimbarea modificatorilor
@@ -350,8 +412,8 @@ public class MainActivity extends Activity {
         mRetainedFragment.setMenuView(currentView);
 
         mRetainedFragment.setRotation(rotation);
-        mRetainedFragment.setFlipedOrizontaly(flipedOrizontaly);
-        mRetainedFragment.setFlipedVerticaly(flipedVerticaly);
+        mRetainedFragment.setFlippedHorizontally(flippedHorizontally);
+        mRetainedFragment.setFlippedVertically(flippedVertically);
     }
 
     private void getModifiers(){
@@ -367,8 +429,8 @@ public class MainActivity extends Activity {
         currentView = mRetainedFragment.getMenuView();
 
         rotation = mRetainedFragment.getRotation();
-        flipedVerticaly = mRetainedFragment.getFlipedVerticaly();
-        flipedOrizontaly = mRetainedFragment.getFlipedOrizontaly();
+        flippedVertically = mRetainedFragment.getFlippedVertically();
+        flippedHorizontally = mRetainedFragment.getFlippedHorizontally();
     }
 
     private void resetModifiers(){
@@ -379,8 +441,8 @@ public class MainActivity extends Activity {
         brightness = 1.0f;
         currentView = "MenuView";
         rotation = 0.0f;
-        flipedOrizontaly = false;
-        flipedVerticaly = false;
+        flippedHorizontally = false;
+        flippedVertically = false;
 
         mRetainedFragment.setFilter(currentFilter);
         mRetainedFragment.setRedValue(redValue);
@@ -391,8 +453,8 @@ public class MainActivity extends Activity {
         mRetainedFragment.setMenuView(currentView);
 
         mRetainedFragment.setRotation(rotation);
-        mRetainedFragment.setFlipedOrizontaly(flipedOrizontaly);
-        mRetainedFragment.setFlipedVerticaly(flipedVerticaly);
+        mRetainedFragment.setFlippedHorizontally(flippedHorizontally);
+        mRetainedFragment.setFlippedVertically(flippedVertically);
     }
 
 
@@ -514,29 +576,6 @@ public class MainActivity extends Activity {
     }
 
 
-    // Undo
-    public void onUndoClicked(View view){
-        if(!modifierList.isEmpty()){
-            modifierList.delete();
-            ColorTransform colorTransform = modifierList.getLastColorTransform();
-            currentFilter = colorTransform.getFilter();
-            redValue = colorTransform.getRedValue();
-            greenValue = colorTransform.getGreenValue();
-            blueValue = colorTransform.getBlueValue();
-            brightness = colorTransform.getBrightness();
-            setModifiers();
-            changeModifiedPicture();
-            changeSeekBars();
-
-            if(modifierList.isEmpty()){
-                ImageButton undo = findViewById(R.id.undo);
-                undo.setVisibility(View.GONE);
-            }
-
-        }
-    }
-
-
 
     // Modificare imagine ( Thread )
     private class ModifyImage extends AsyncTask<String,Integer,Bitmap> {
@@ -569,7 +608,7 @@ public class MainActivity extends Activity {
             Utils.bitmapToMat(bmp32, mRgba);
 
             //process image
-            MyImageProcessing.processImage(mRgba, currentFilter, redValue, greenValue, blueValue, brightness);
+           MyImageProcessing.processImage(mRgba, currentFilter, redValue, greenValue, blueValue, brightness).copyTo(mRgba);
 
             // convert Mat to Bitmap
             Bitmap modifiedImage = (Bitmap.createBitmap(mRgba.cols(), mRgba.rows(), Bitmap.Config.ARGB_8888));
@@ -579,7 +618,6 @@ public class MainActivity extends Activity {
         }
         return null;
     }
-
 
 
     //Transformare geometrica a imaginii
@@ -611,7 +649,7 @@ public class MainActivity extends Activity {
     }
 
     // Functia de transformare geometrica a imaginii apelata de thread
-    private Bitmap getTransformedImage(float rotation , boolean flipedVerticaly , boolean flipedOrizontaly) {
+    private Bitmap getTransformedImage(float rotation , boolean flippedVertically , boolean flippedHorizontally) {
         if(initialImage != null) {
             if (initialImage != null) {
                 // convert Bitmap to Mat
@@ -619,14 +657,15 @@ public class MainActivity extends Activity {
                 Bitmap bmp32 = initialImage.copy(Bitmap.Config.ARGB_8888, true);
                 Utils.bitmapToMat(bmp32, mRgba);
 
+                //Rotate
+                if(rotation != 0.0f)
+                    MyImageProcessing.rotateImage(mRgba, rotation).copyTo(mRgba);
 
-                MyImageProcessing.rotateImage(mRgba, rotation).copyTo(mRgba);
-
-                //flip_orizontaly image
-                if (flipedVerticaly)
-                    MyImageProcessing.flipImageVerticaly(mRgba).copyTo(mRgba);
-                if (flipedOrizontaly)
-                    MyImageProcessing.flipImageOrizontaly(mRgba).copyTo(mRgba);
+                //flip_Horizontally image
+                if (flippedVertically)
+                    MyImageProcessing.flipImageVertically(mRgba).copyTo(mRgba);
+                if (flippedHorizontally)
+                    MyImageProcessing.flipImageHorizontally(mRgba).copyTo(mRgba);
 
                 // convert Mat to Bitmap
                 Bitmap modifiedImage = (Bitmap.createBitmap(mRgba.cols(), mRgba.rows(), Bitmap.Config.ARGB_8888));
@@ -637,7 +676,6 @@ public class MainActivity extends Activity {
         }
         return null;
     }
-
 
 
 

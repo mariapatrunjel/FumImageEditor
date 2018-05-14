@@ -24,11 +24,10 @@ public class MyImageProcessing {
      public static native void newFilter(long addrRgba, long addrResultImage, double alpha);
 
      public static native void rotate(long addrRgba, long addrResultImage, double alpha);
-     public static native void flipOrizontaly(long addrRgba, long addrResultImage);
-     public static native void flipVerticaly(long addrRgba, long addrResultImage);
+     public static native void flipHorizontally(long addrRgba, long addrResultImage);
+     public static native void flipVertically(long addrRgba, long addrResultImage);
 
      public static Mat processImage(Mat image, String currentFilter ,int redValue,int greenValue,int blueValue,float brightness){
-         if(currentFilter.equals("Normal"))
              switch (currentFilter) {
                    case "Sepia":
                         sepiaFilter(image.getNativeObjAddr(),image.getNativeObjAddr());
@@ -45,10 +44,6 @@ public class MyImageProcessing {
                    case "Magenta":
                         redTonedFillter(image.getNativeObjAddr(),image.getNativeObjAddr(),8.0f);
                         blueTonedFillter(image.getNativeObjAddr(),image.getNativeObjAddr(),8.0f);
-                        break;
-                   case "Cartoon":
-                        cartoonFilter(image.getNativeObjAddr(),image.getNativeObjAddr());
-                        Imgproc.cvtColor(image, image, Imgproc.COLOR_GRAY2RGB, 4);
                         break;
                    case "Sketch":
                         sketchFilter(image.getNativeObjAddr(),image.getNativeObjAddr());
@@ -112,14 +107,14 @@ public class MyImageProcessing {
          rotate(image.getNativeObjAddr(),resultImage.getNativeObjAddr(),alphaDouble);
          return resultImage;
      }
-     public static Mat flipImageVerticaly(Mat image){
+     public static Mat flipImageVertically(Mat image){
           Mat resultImage = image.clone();
-          flipVerticaly(image.getNativeObjAddr(),resultImage.getNativeObjAddr());
+          flipVertically(image.getNativeObjAddr(),resultImage.getNativeObjAddr());
           return resultImage;
      }
-     public static Mat flipImageOrizontaly(Mat image){
+     public static Mat flipImageHorizontally(Mat image){
           Mat resultImage = image.clone();
-          flipOrizontaly(image.getNativeObjAddr(),resultImage.getNativeObjAddr());
+          flipHorizontally(image.getNativeObjAddr(),resultImage.getNativeObjAddr());
           return resultImage;
      }
 

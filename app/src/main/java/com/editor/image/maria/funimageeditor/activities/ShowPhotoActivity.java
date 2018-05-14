@@ -43,7 +43,7 @@ public class ShowPhotoActivity extends Activity {
             mRetainedFragment.setImage(currentImage);
         }
 
-        ImageView imgPicture =(ImageView)findViewById(R.id.imageView);
+        ImageView imgPicture =findViewById(R.id.imageView);
         imgPicture.setImageBitmap(currentImage);
     }
 
