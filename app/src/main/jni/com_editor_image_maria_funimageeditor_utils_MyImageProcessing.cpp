@@ -2,8 +2,7 @@
 
 
 JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageProcessing_changeRGBChannels
-        (JNIEnv *, jclass, jlong addrRgba, jlong addrResultImage,jint red,jint green,jint blue)
-{
+        (JNIEnv *, jclass, jlong addrRgba, jlong addrResultImage,jint red,jint green,jint blue) {
     Mat &mRgba = *(Mat *) addrRgba;
     Mat &resultImage = *(Mat *) addrResultImage;
     for (int i = 0; i < mRgba.rows; i++) {
@@ -47,8 +46,7 @@ JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageP
 }
 
 JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageProcessing_gammaCorrection
-        (JNIEnv *, jclass, jlong addrRgba, jlong addrResultImage, jfloat gamma)
-{
+        (JNIEnv *, jclass, jlong addrRgba, jlong addrResultImage, jfloat gamma) {
     Mat &mRgba = *(Mat *) addrRgba;
     Mat &resultImage = *(Mat *) addrResultImage;
     unsigned char lut[256];
@@ -73,93 +71,60 @@ JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageP
 
 }
 
-JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageProcessing_sepiaFilter
-        (JNIEnv *, jclass, jlong addrRgba, jlong addrResultImage)
-{
+
+
+
+JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageProcessing_negativeFillter
+        (JNIEnv *, jclass, jlong addrRgba, jlong addrResultImage) {
     Mat &mRgba = *(Mat *) addrRgba;
     Mat &resultImage = *(Mat *) addrResultImage;
-    int r,b,g,tr,tg,tb;
+    for (int i = 0;   i < mRgba.rows; i++) {
+        for (int j = 0; j < mRgba.cols; j++) {
+            resultImage.data[resultImage.step[0] * i + resultImage.step[1] * j + 0] = (uchar) 255 - mRgba.data[resultImage.step[0] * i + resultImage.step[1] * j ];
+        }
+    }
+}
+
+JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageProcessing_sepiaFilter
+        (JNIEnv *, jclass, jlong addrRgba, jlong addrResultImage) {
+    Mat &mRgba = *(Mat *) addrRgba;
+    Mat &resultImage = *(Mat *) addrResultImage;
+    double r,b,g,tr,tg,tb;
     for (int i = 0; i < mRgba.rows; i++) {
         for (int j = 0; j < mRgba.cols; j++) {
             r = mRgba.data[resultImage.step[0] * i + resultImage.step[1] * j + 0];
             g = mRgba.data[resultImage.step[0] * i + resultImage.step[1] * j + 1];
             b = mRgba.data[resultImage.step[0] * i + resultImage.step[1] * j + 2];
 
-            tr = (int)(0.393*r + 0.769*g + 0.189*b);
-            tg = (int)(0.349*r + 0.686*g + 0.168*b);
-            tb = (int)(0.272*r + 0.534*g + 0.131*b);
+            tr = (0.393*r + 0.769*g + 0.189*b);
+            tg = (0.349*r + 0.686*g + 0.168*b);
+            tb = (0.272*r + 0.534*g + 0.131*b);
 
             // Red
             if (tr > 255)
                 resultImage.data[resultImage.step[0] * i + resultImage.step[1] * j + 0] = 255;
               else
-                resultImage.data[resultImage.step[0] * i + resultImage.step[1] * j + 0] = tr;
+                resultImage.data[resultImage.step[0] * i + resultImage.step[1] * j + 0] =(uchar) tr;
 
             // Green
             if (tg > 255)
                 resultImage.data[resultImage.step[0] * i + resultImage.step[1] * j + 1] = 255;
             else
-                resultImage.data[resultImage.step[0] * i + resultImage.step[1] * j + 1] = tg;
+                resultImage.data[resultImage.step[0] * i + resultImage.step[1] * j + 1] =(uchar) tg;
 
             // Blue
             if (tb > 255)
                 resultImage.data[resultImage.step[0] * i + resultImage.step[1] * j + 2] = 255;
             else
-                resultImage.data[resultImage.step[0] * i + resultImage.step[1] * j + 2] = tb;
+                resultImage.data[resultImage.step[0] * i + resultImage.step[1] * j + 2] = (uchar) tb;
 
         }
 
     }
 }
 
-JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageProcessing_cartoonFilter
-        (JNIEnv *, jclass, jlong addrRgba, jlong addrResultImage)
-{
-    Mat &src = *(Mat *) addrRgba;
-    Mat &dst = *(Mat *) addrResultImage;
-
-    Mat gray;
-    cvtColor(src,gray,CV_RGB2GRAY);
-    const int MEDIAN_BLUR_FILTER_SIZE = 7;
-    medianBlur(gray,gray,MEDIAN_BLUR_FILTER_SIZE);
-
-    Mat edges;
-    const int LAPLACIAN_FILTER_SIZE = 5;
-    Laplacian(gray,edges,CV_8U,LAPLACIAN_FILTER_SIZE);
-
-    Mat mask = Mat(dst.size(),CV_8UC3);
-    const int EDGES_THRESHOLD = 80;
-    threshold(edges,mask,EDGES_THRESHOLD,255,THRESH_BINARY_INV);
-
-     Size size = src.size();
-    Size smallSize;
-    smallSize.width = size.width/2;
-    smallSize.height = size.height/2;
-
-    Mat smallImg = Mat(smallSize,CV_8UC3);
-    resize(src,smallImg,smallSize,0,0,INTER_LINEAR);
-
-    Mat tmp = Mat(smallSize,CV_8UC3);
-    int repetitions = 1;
-    for(int i=0;i<repetitions;i++){
-        int ksize = 9;
-        double sigmaColor = 9;
-        double sigmaSpace = 7;
-        bilateralFilter(smallImg, tmp,ksize,sigmaColor,sigmaSpace);
-        bilateralFilter(tmp, smallImg, ksize, sigmaColor,sigmaSpace);
-    }
-    Mat bigImg;
-    resize(smallImg,bigImg,size,0,0,INTER_LINEAR);
-
-    dst.setTo(0);
-    mask.copyTo(dst,mask);
-
-
-}
-
 JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageProcessing_sketchFilter
-        (JNIEnv *, jclass, jlong addrRgba, jlong addrResultImage)
-{
+        (JNIEnv *, jclass, jlong addrRgba, jlong addrResultImage) {
     Mat &src = *(Mat *) addrRgba;
     Mat &mask = *(Mat *) addrResultImage;
 
@@ -178,8 +143,7 @@ JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageP
 }
 
 JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageProcessing_colorMapFilter
-        (JNIEnv *, jclass,jlong addrRgba, jlong addrResultImage,jint colorMapName)
-{
+        (JNIEnv *, jclass,jlong addrRgba, jlong addrResultImage,jint colorMapName) {
     Mat &rgba = *(Mat *) addrRgba;
     Mat &result = *(Mat *) addrResultImage;
 
@@ -187,9 +151,10 @@ JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageP
     applyColorMap(result,result,colorMapName);
 }
 
+
+
 JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageProcessing_histogramEqualizationYCbCr
-        (JNIEnv *, jclass,jlong addrRgba, jlong addrResultImage, jint channel)
-{
+        (JNIEnv *, jclass,jlong addrRgba, jlong addrResultImage, jint channel) {
     Mat &inputImage = *(Mat *) addrRgba;
     Mat &result = *(Mat *) addrResultImage;
     Mat ycrcb;
@@ -203,8 +168,7 @@ JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageP
 }
 
 JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageProcessing_histogramEqualizationHSV
-        (JNIEnv *, jclass,jlong addrRgba, jlong addrResultImage,jint channel)
-{
+        (JNIEnv *, jclass,jlong addrRgba, jlong addrResultImage,jint channel) {
     Mat &inputImage = *(Mat *) addrRgba;
     Mat &result = *(Mat *) addrResultImage;
     Mat hsv;
@@ -217,9 +181,10 @@ JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageP
     cvtColor(hsv,result,CV_HSV2RGB);
 }
 
+
+
 JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageProcessing_redTonedFillter
-        (JNIEnv *, jclass, jlong addrRgba, jlong addrResultImage, jdouble alpha)
-{
+        (JNIEnv *, jclass, jlong addrRgba, jlong addrResultImage, jdouble alpha) {
     Mat &mRgba = *(Mat *) addrRgba;
     Mat &resultImage = *(Mat *) addrResultImage;
     double u = ((alpha + 45) * M_PI) / 180;
@@ -230,7 +195,7 @@ JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageP
     // Change with sin function
     for (int i = 0; i < 256; i++) {
         //double t = i/255.0f;
-        lut[i] = 255.0f * sin(i * M_PI / 510.0f);
+        lut[i] = (uchar)(255.0f * sin(i * M_PI / 510.0f));
         if (lut[i] < 0)
             lut[i] = 0;
         if (lut[i] > 255)
@@ -248,8 +213,7 @@ JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageP
 }
 
 JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageProcessing_greenTonedFillter
-        (JNIEnv *, jclass, jlong addrRgba, jlong addrResultImage, jdouble alpha)
-{
+        (JNIEnv *, jclass, jlong addrRgba, jlong addrResultImage, jdouble alpha) {
     Mat &mRgba = *(Mat *) addrRgba;
     Mat &resultImage = *(Mat *) addrResultImage;
     double u = ((alpha + 45) * M_PI) / 180;
@@ -277,10 +241,8 @@ JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageP
     }
 }
 
-
 JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageProcessing_blueTonedFillter
-        (JNIEnv *, jclass, jlong addrRgba, jlong addrResultImage, jdouble alpha)
-{
+        (JNIEnv *, jclass, jlong addrRgba, jlong addrResultImage, jdouble alpha) {
     Mat &mRgba = *(Mat *) addrRgba;
     Mat &resultImage = *(Mat *) addrResultImage;
     double u = ((alpha + 45) * M_PI) / 180;
@@ -306,40 +268,11 @@ JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageP
     }
 }
 
-JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageProcessing_newFilter
-          (JNIEnv *, jclass, jlong addrRgba, jlong addrResultImage, jdouble alpha)
-  {
-      Mat &mRgba = *(Mat *) addrRgba;
-      Mat &resultImage = *(Mat *) addrResultImage;
-      unsigned char lut[256];
-      double u = ((alpha + 45)*M_PI)/180;
-      double v = ((135-alpha)*M_PI)/180;
-      double r = (255.0f*sqrt(2.0f))/cos(alpha*M_PI/180.0f);
-      double ax = cos(u)*r, bx=cos(v)*r;
-      double ay = sin(u)*r, by=sin(v)*r;
 
-      for(double t=0;t<=1;t+=0.001)
-          {
-              double xt = (-2 * t * t * t + 3 * t * t) * 255.0f + (t*t*t-2*t*t+t)*ax+(t*t*t-t*t)*bx;
-              double yt = (-2 * t * t * t + 3 * t * t) * 255.0f + (t*t*t-2*t*t+t)*ay+(t*t*t-t*t)*by;
-              if(xt+0.5 <256 )
-                  lut[(int)(xt+0.5)]=(uchar)(yt+0.5);
-          }
-      for (int i = 0; i < mRgba.rows; i++) {
-          for (int j = 0; j < mRgba.cols; j++) {
-              resultImage.data[resultImage.step[0] * i + resultImage.step[1] * j + 0] = lut[mRgba.data[mRgba.step[0] * i + mRgba.step[1] * j + 0]];
-              resultImage.data[resultImage.step[0] * i + resultImage.step[1] * j + 1] = mRgba.data[mRgba.step[0] * i + mRgba.step[1] * j + 1];
-              resultImage.data[resultImage.step[0] * i + resultImage.step[1] * j + 2] = mRgba.data[mRgba.step[0] * i + mRgba.step[1] * j + 2];
-          }
-
-      }
-  }
 
 
 JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageProcessing_rotate
-        (JNIEnv *, jclass, jlong addrRgba, jlong addrResultImage, jdouble alpha)
-
-{
+        (JNIEnv *, jclass, jlong addrRgba, jlong addrResultImage, jdouble alpha) {
     Mat &mRgba = *(Mat *) addrRgba;
     Mat &resultImage = *(Mat *) addrResultImage;
     double xCenter = mRgba.rows / 2.0;
@@ -439,3 +372,47 @@ JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageP
             }
 }
 
+/*
+JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageProcessing_cartoonFilter
+        (JNIEnv *, jclass, jlong addrRgba, jlong addrResultImage) {
+    Mat &src = *(Mat *) addrRgba;
+    Mat &dst = *(Mat *) addrResultImage;
+
+    Mat gray;
+    cvtColor(src,gray,CV_RGB2GRAY);
+    const int MEDIAN_BLUR_FILTER_SIZE = 7;
+    medianBlur(gray,gray,MEDIAN_BLUR_FILTER_SIZE);
+
+    Mat edges;
+    const int LAPLACIAN_FILTER_SIZE = 5;
+    Laplacian(gray,edges,CV_8U,LAPLACIAN_FILTER_SIZE);
+
+    Mat mask = Mat(dst.size(),CV_8UC3);
+    const int EDGES_THRESHOLD = 80;
+    threshold(edges,mask,EDGES_THRESHOLD,255,THRESH_BINARY_INV);
+
+     Size size = src.size();
+    Size smallSize;
+    smallSize.width = size.width/2;
+    smallSize.height = size.height/2;
+
+    Mat smallImg = Mat(smallSize,CV_8UC3);
+    resize(src,smallImg,smallSize,0,0,INTER_LINEAR);
+
+    Mat tmp = Mat(smallSize,CV_8UC3);
+    int repetitions = 1;
+    for(int i=0;i<repetitions;i++){
+        int ksize = 9;
+        double sigmaColor = 9;
+        double sigmaSpace = 7;
+        bilateralFilter(smallImg, tmp,ksize,sigmaColor,sigmaSpace);
+        bilateralFilter(tmp, smallImg, ksize, sigmaColor,sigmaSpace);
+    }
+    Mat bigImg;
+    resize(smallImg,bigImg,size,0,0,INTER_LINEAR);
+
+    dst.setTo(0);
+    mask.copyTo(dst,mask);
+
+
+} */

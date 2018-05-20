@@ -42,14 +42,6 @@ JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageP
 
 /*
  * Class:     com_editor_image_maria_funimageeditor_utils_MyImageProcessing
- * Method:    cartoonFilter
- * Signature: (JJ)V
- */
-JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageProcessing_cartoonFilter
-  (JNIEnv *, jclass, jlong, jlong);
-
-/*
- * Class:     com_editor_image_maria_funimageeditor_utils_MyImageProcessing
  * Method:    sketchFilter
  * Signature: (JJ)V
  */
@@ -106,11 +98,11 @@ JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageP
 
 /*
  * Class:     com_editor_image_maria_funimageeditor_utils_MyImageProcessing
- * Method:    newFilter
- * Signature: (JJD)V
+ * Method:    negativeFillter
+ * Signature: (JJ)V
  */
-JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageProcessing_newFilter
-  (JNIEnv *, jclass, jlong, jlong, jdouble);
+JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageProcessing_negativeFillter
+  (JNIEnv *, jclass, jlong, jlong);
 
 /*
  * Class:     com_editor_image_maria_funimageeditor_utils_MyImageProcessing

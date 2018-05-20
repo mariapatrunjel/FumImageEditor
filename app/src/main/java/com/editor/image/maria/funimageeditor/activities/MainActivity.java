@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.constraint.ConstraintLayout;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
@@ -90,6 +91,7 @@ public class MainActivity extends Activity {
         getModifiers();
         changeSeekBars();
         setSeekBarsListeners();
+        setImageViewOnTouchListener();
         changeView();
         changeTransformedPicture();
 
@@ -136,7 +138,7 @@ public class MainActivity extends Activity {
                         changeView();
                         changeSeekBars();
                         setSeekBarsListeners();
-
+                        setImageViewOnTouchListener();
 
 
                     } catch (FileNotFoundException e) {
@@ -187,6 +189,7 @@ public class MainActivity extends Activity {
             changeView();
             changeSeekBars();
             setSeekBarsListeners();
+            setImageViewOnTouchListener();
         }
         else {
             initialImage = mRetainedFragment.getInitialImage();
@@ -575,6 +578,31 @@ public class MainActivity extends Activity {
 
     }
 
+    // Setare image view listener
+    private void setImageViewOnTouchListener(){
+
+        ImageView imageView = findViewById(R.id.imageView);
+
+        imageView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                 if (event.getAction() == MotionEvent.ACTION_DOWN) {//Button pressed
+                     if (initialImage != null) {
+                         ImageView imgPicture = findViewById(R.id.imageView);
+                         imgPicture.setImageBitmap(initialImage);
+                         return true;
+                     }
+                 }
+                 else if (event.getAction() == MotionEvent.ACTION_UP) {// Button released
+                     if(currentImage != null) {
+                         ImageView imgPicture = findViewById(R.id.imageView);
+                         imgPicture.setImageBitmap(getModifiedImage(currentFilter, redValue, greenValue, blueValue, brightness));
+                     }
+                 }
+                 return false;
+            }
+      });
+    }
 
 
     // Modificare imagine ( Thread )
@@ -688,8 +716,12 @@ public class MainActivity extends Activity {
         changeFilter("Sepia");
     }
 
-    public void onCartoonFilterClicked(View view) {
-        changeFilter("Cartoon");
+    public void onGrayFilterClicked(View view) {
+        changeFilter("Gray");
+    }
+
+    public void onNegativeFilterClicked(View view) {
+        changeFilter("Negative");
     }
 
     public void onSketchFilterClicked(View view) {
@@ -748,8 +780,5 @@ public class MainActivity extends Activity {
         changeFilter("HEqV");
     }
 
-    public void onNewFilterClicked(View view) {
-        changeFilter("New");
-    }
 
 }

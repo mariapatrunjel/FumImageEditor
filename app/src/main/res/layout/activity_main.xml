@@ -82,6 +82,7 @@
         app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@android:color/background_light"/>
 
+
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyleLarge"
@@ -119,6 +120,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:fillViewport="true"
             android:scrollbars="horizontal"
             android:visibility="invisible"
@@ -132,6 +134,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:layout_marginTop="8dp"
+
                 android:orientation="horizontal"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
@@ -299,7 +302,7 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="4dp"
                 android:layout_marginTop="8dp"
                 android:orientation="horizontal"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -323,11 +326,10 @@
                     android:scaleType="fitXY"
                     android:src="@drawable/back"/>
 
-
                 <ImageButton
                     android:id="@+id/normalFilterButton"
                     android:layout_width="60dp"
-                    android:layout_height="40dp"
+                    android:layout_height="55dp"
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
                     android:adjustViewBounds="true"
@@ -336,26 +338,12 @@
                     android:cropToPadding="false"
                     android:onClick="onNormalFilterClicked"
                     android:scaleType="fitXY"
-                    android:src="@drawable/normal_filter"/>
-
-                <ImageButton
-                    android:id="@+id/newFilterButton"
-                    android:layout_width="60dp"
-                    android:layout_height="40dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:adjustViewBounds="true"
-                    android:background="#00000000"
-                    android:contentDescription="@null"
-                    android:cropToPadding="false"
-                    android:onClick="onNewFilterClicked"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/new_filter"/>
+                    android:src="@drawable/filter_normal"/>
 
                 <ImageButton
                     android:id="@+id/hEqYFilterButton"
                     android:layout_width="60dp"
-                    android:layout_height="40dp"
+                    android:layout_height="55dp"
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
                     android:adjustViewBounds="true"
@@ -364,12 +352,12 @@
                     android:cropToPadding="false"
                     android:onClick="onHEqYFilterClicked"
                     android:scaleType="fitXY"
-                    android:src="@drawable/histogram_y_filter"/>
+                    android:src="@drawable/filter_enchante"/>
 
                 <ImageButton
                     android:id="@+id/hEqCrFilterButton"
                     android:layout_width="60dp"
-                    android:layout_height="40dp"
+                    android:layout_height="55dp"
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
                     android:adjustViewBounds="true"
@@ -378,12 +366,12 @@
                     android:cropToPadding="false"
                     android:onClick="onHEqCrFilterClicked"
                     android:scaleType="fitXY"
-                    android:src="@drawable/histogram_cr_filter"/>
+                    android:src="@drawable/filter_equalize"/>
 
                 <ImageButton
                     android:id="@+id/hEqSFilterButton"
                     android:layout_width="60dp"
-                    android:layout_height="40dp"
+                    android:layout_height="55dp"
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
                     android:adjustViewBounds="true"
@@ -392,12 +380,12 @@
                     android:cropToPadding="false"
                     android:onClick="onHEqSFilterClicked"
                     android:scaleType="fitXY"
-                    android:src="@drawable/histogram_s_filter"/>
+                    android:src="@drawable/filter_define"/>
 
                 <ImageButton
                     android:id="@+id/hEqVFilterButton"
                     android:layout_width="60dp"
-                    android:layout_height="40dp"
+                    android:layout_height="55dp"
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
                     android:adjustViewBounds="true"
@@ -406,124 +394,12 @@
                     android:cropToPadding="false"
                     android:onClick="onHEqVFilterClicked"
                     android:scaleType="fitXY"
-                    android:src="@drawable/histogram_v_filter"/>
-
-                <ImageButton
-                    android:id="@+id/pinkFilterButton"
-                    android:layout_width="60dp"
-                    android:layout_height="40dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:adjustViewBounds="true"
-                    android:background="#00000000"
-                    android:contentDescription="@null"
-                    android:cropToPadding="false"
-                    android:onClick="onPinkFilterClicked"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/pink_filter"/>
-
-                <ImageButton
-                    android:id="@+id/hotFilterButton"
-                    android:layout_width="60dp"
-                    android:layout_height="40dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:adjustViewBounds="true"
-                    android:background="#00000000"
-                    android:contentDescription="@null"
-                    android:cropToPadding="false"
-                    android:onClick="onHotFilterClicked"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/hot_filter"/>
-
-                <ImageButton
-                    android:id="@+id/boneFilterButton"
-                    android:layout_width="60dp"
-                    android:layout_height="40dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:adjustViewBounds="true"
-                    android:background="#00000000"
-                    android:contentDescription="@null"
-                    android:cropToPadding="false"
-                    android:onClick="onBoneFilterClicked"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/bone_filter"/>
-
-                <ImageButton
-                    android:id="@+id/newoceanFilterButton"
-                    android:layout_width="60dp"
-                    android:layout_height="40dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:adjustViewBounds="true"
-                    android:background="#00000000"
-                    android:contentDescription="@null"
-                    android:cropToPadding="false"
-                    android:onClick="onOceanFilterClicked"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/ocean_filter"/>
-
-                <ImageButton
-                    android:id="@+id/sepiaFilterButton"
-                    android:layout_width="60dp"
-                    android:layout_height="40dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:adjustViewBounds="true"
-                    android:background="#00000000"
-                    android:contentDescription="@null"
-                    android:cropToPadding="false"
-                    android:onClick="onSepiaFilterClicked"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/sepia_filter"/>
-
-                <ImageButton
-                    android:id="@+id/cartoonFilterButton"
-                    android:layout_width="60dp"
-                    android:layout_height="40dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:adjustViewBounds="true"
-                    android:background="#00000000"
-                    android:contentDescription="@null"
-                    android:cropToPadding="false"
-                    android:onClick="onCartoonFilterClicked"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/cartoon_filter"/>
-
-                <ImageButton
-                    android:id="@+id/sketchFilterButton"
-                    android:layout_width="60dp"
-                    android:layout_height="40dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:adjustViewBounds="true"
-                    android:background="#00000000"
-                    android:contentDescription="@null"
-                    android:cropToPadding="false"
-                    android:onClick="onSketchFilterClicked"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/sketch_filter"/>
-
-                <ImageButton
-                    android:id="@+id/cannyFilterButton"
-                    android:layout_width="60dp"
-                    android:layout_height="40dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:adjustViewBounds="true"
-                    android:background="#00000000"
-                    android:contentDescription="@null"
-                    android:cropToPadding="false"
-                    android:onClick="onCannyFilterClicked"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/canny_filter"/>
+                    android:src="@drawable/filter_emphasize"/>
 
                 <ImageButton
                     android:id="@+id/redFilterButton"
                     android:layout_width="60dp"
-                    android:layout_height="40dp"
+                    android:layout_height="55dp"
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
                     android:adjustViewBounds="true"
@@ -532,12 +408,12 @@
                     android:cropToPadding="false"
                     android:onClick="onRedFilterClicked"
                     android:scaleType="fitXY"
-                    android:src="@drawable/red_filter"/>
+                    android:src="@drawable/filter_red"/>
 
                 <ImageButton
                     android:id="@+id/greenFilterButton"
                     android:layout_width="60dp"
-                    android:layout_height="40dp"
+                    android:layout_height="55dp"
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
                     android:adjustViewBounds="true"
@@ -546,12 +422,12 @@
                     android:cropToPadding="false"
                     android:onClick="onGreenFilterClicked"
                     android:scaleType="fitXY"
-                    android:src="@drawable/green_filter"/>
+                    android:src="@drawable/filter_green"/>
 
                 <ImageButton
                     android:id="@+id/blueFilterButton"
                     android:layout_width="60dp"
-                    android:layout_height="40dp"
+                    android:layout_height="55dp"
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
                     android:adjustViewBounds="true"
@@ -560,12 +436,12 @@
                     android:cropToPadding="false"
                     android:onClick="onBlueFilterClicked"
                     android:scaleType="fitXY"
-                    android:src="@drawable/blue_filter"/>
+                    android:src="@drawable/filter_blue"/>
 
                 <ImageButton
                     android:id="@+id/magentaFilterButton"
                     android:layout_width="60dp"
-                    android:layout_height="40dp"
+                    android:layout_height="55dp"
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
                     android:adjustViewBounds="true"
@@ -574,7 +450,133 @@
                     android:cropToPadding="false"
                     android:onClick="onMagentaFilterClicked"
                     android:scaleType="fitXY"
-                    android:src="@drawable/magenta_filter"/>
+                    android:src="@drawable/filter_magenta"/>
+
+                <ImageButton
+                    android:id="@+id/sketchFilterButton"
+                    android:layout_width="60dp"
+                    android:layout_height="55dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:adjustViewBounds="true"
+                    android:background="#00000000"
+                    android:contentDescription="@null"
+                    android:cropToPadding="false"
+                    android:onClick="onSketchFilterClicked"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/filter_sketch"/>
+
+                <ImageButton
+                    android:id="@+id/cannyFilterButton"
+                    android:layout_width="60dp"
+                    android:layout_height="55dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:adjustViewBounds="true"
+                    android:background="#00000000"
+                    android:contentDescription="@null"
+                    android:cropToPadding="false"
+                    android:onClick="onCannyFilterClicked"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/filter_canny"/>
+
+                <ImageButton
+                    android:id="@+id/grayFilterButton"
+                    android:layout_width="60dp"
+                    android:layout_height="55dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:adjustViewBounds="true"
+                    android:background="#00000000"
+                    android:contentDescription="@null"
+                    android:cropToPadding="false"
+                    android:onClick="onGrayFilterClicked"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/filter_gray"/>
+
+                <ImageButton
+                    android:id="@+id/negativeFilterButton"
+                    android:layout_width="60dp"
+                    android:layout_height="55dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:adjustViewBounds="true"
+                    android:background="#00000000"
+                    android:contentDescription="@null"
+                    android:cropToPadding="false"
+                    android:onClick="onNegativeFilterClicked"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/filter_negative"/>
+
+                <ImageButton
+                    android:id="@+id/sepiaFilterButton"
+                    android:layout_width="60dp"
+                    android:layout_height="55dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:adjustViewBounds="true"
+                    android:background="#00000000"
+                    android:contentDescription="@null"
+                    android:cropToPadding="false"
+                    android:onClick="onSepiaFilterClicked"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/filter_sepia"/>
+
+                <ImageButton
+                    android:id="@+id/pinkFilterButton"
+                    android:layout_width="60dp"
+                    android:layout_height="55dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:adjustViewBounds="true"
+                    android:background="#00000000"
+                    android:contentDescription="@null"
+                    android:cropToPadding="false"
+                    android:onClick="onPinkFilterClicked"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/filter_antique"/>
+
+                <ImageButton
+                    android:id="@+id/hotFilterButton"
+                    android:layout_width="60dp"
+                    android:layout_height="55dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:adjustViewBounds="true"
+                    android:background="#00000000"
+                    android:contentDescription="@null"
+                    android:cropToPadding="false"
+                    android:onClick="onHotFilterClicked"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/filter_warm"/>
+
+                <ImageButton
+                    android:id="@+id/boneFilterButton"
+                    android:layout_width="60dp"
+                    android:layout_height="55dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:adjustViewBounds="true"
+                    android:background="#00000000"
+                    android:contentDescription="@null"
+                    android:cropToPadding="false"
+                    android:onClick="onBoneFilterClicked"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/filter_cold"/>
+
+                <ImageButton
+                    android:id="@+id/newoceanFilterButton"
+                    android:layout_width="60dp"
+                    android:layout_height="55dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:adjustViewBounds="true"
+                    android:background="#00000000"
+                    android:contentDescription="@null"
+                    android:cropToPadding="false"
+                    android:onClick="onOceanFilterClicked"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/filter_ocean"/>
 
             </LinearLayout>
         </HorizontalScrollView>
@@ -763,7 +765,6 @@
         </android.support.constraint.ConstraintLayout>
 
     </android.support.constraint.ConstraintLayout>
-
 
 
 </android.support.constraint.ConstraintLayout>

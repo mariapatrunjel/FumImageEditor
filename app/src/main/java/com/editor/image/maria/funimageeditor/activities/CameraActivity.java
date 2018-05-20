@@ -137,79 +137,7 @@ public class CameraActivity extends Activity implements CameraBridgeViewBase.CvC
     @Override
     public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
         mRgba = inputFrame.rgba();
-        switch (currentFilter) {
-            case "Sepia":
-                MyImageProcessing.sepiaFilter(mRgba.getNativeObjAddr(),mRgba.getNativeObjAddr());
-                break;
-            case "Red":
-                MyImageProcessing.redTonedFillter(mRgba.getNativeObjAddr(),mRgba.getNativeObjAddr(),8.0f);
-                break;
-            case "Green":
-                MyImageProcessing.greenTonedFillter(mRgba.getNativeObjAddr(),mRgba.getNativeObjAddr(),8.0f);
-                break;
-            case "Blue":
-                MyImageProcessing.blueTonedFillter(mRgba.getNativeObjAddr(),mRgba.getNativeObjAddr(),8.0f);
-                break;
-            case "Magenta":
-                MyImageProcessing.redTonedFillter(mRgba.getNativeObjAddr(),mRgba.getNativeObjAddr(),8.0f);
-                MyImageProcessing.blueTonedFillter(mRgba.getNativeObjAddr(),mRgba.getNativeObjAddr(),8.0f);
-                //changeRGBChannels(image.getNativeObjAddr(),image.getNativeObjAddr(),40,0,40);
-                break;
-            case "Cartoon":
-                MyImageProcessing.cartoonFilter(mRgba.getNativeObjAddr(),mRgba.getNativeObjAddr());
-                Imgproc.cvtColor(mRgba, mRgba, Imgproc.COLOR_GRAY2RGB, 4);
-                break;
-            case "Sketch":
-                MyImageProcessing.sketchFilter(mRgba.getNativeObjAddr(),mRgba.getNativeObjAddr());
-                Imgproc.cvtColor(mRgba, mRgba, Imgproc.COLOR_GRAY2RGB, 4);
-                break;
-            case "Canny":
-                Imgproc.cvtColor(mRgba, mRgba, Imgproc.COLOR_RGB2GRAY, 4);
-                Imgproc.Canny(mRgba, mRgba, 80, 100);
-                Imgproc.cvtColor(mRgba, mRgba, Imgproc.COLOR_GRAY2RGB, 4);
-                break;
-            case "Winter":
-                MyImageProcessing.colorMapFilter(mRgba.getNativeObjAddr(), mRgba.getNativeObjAddr(),0);
-                break;
-            case "Pink":
-                MyImageProcessing.colorMapFilter(mRgba.getNativeObjAddr(), mRgba.getNativeObjAddr(),1);
-                break;
-            case "Hot":
-                MyImageProcessing.colorMapFilter(mRgba.getNativeObjAddr(), mRgba.getNativeObjAddr(),5);
-                break;
-            case "Bone":
-                MyImageProcessing.colorMapFilter(mRgba.getNativeObjAddr(), mRgba.getNativeObjAddr(),10);
-                break;
-            case "Ocean":
-                MyImageProcessing.colorMapFilter(mRgba.getNativeObjAddr(), mRgba.getNativeObjAddr(),11);
-                break;
-            case "HEqY":
-                MyImageProcessing.histogramEqualizationYCbCr(mRgba.getNativeObjAddr(), mRgba.getNativeObjAddr(),0);
-                break;
-            case "HEqCb":
-                MyImageProcessing.histogramEqualizationYCbCr(mRgba.getNativeObjAddr(), mRgba.getNativeObjAddr(),1);
-                break;
-            case "HEqS":
-                MyImageProcessing.histogramEqualizationHSV(mRgba.getNativeObjAddr(), mRgba.getNativeObjAddr(),1);
-                break;
-            case "HEqV":
-                MyImageProcessing.histogramEqualizationHSV(mRgba.getNativeObjAddr(), mRgba.getNativeObjAddr(),2);
-                break;
-            case "New":
-                MyImageProcessing.newFilter(mRgba.getNativeObjAddr(),mRgba.getNativeObjAddr(),2);
-                break;
-        }
-        if(redValue != 0 || greenValue != 0 || blueValue!= 0)
-            MyImageProcessing.changeRGBChannels(mRgba.getNativeObjAddr(),mRgba.getNativeObjAddr(),redValue,greenValue,blueValue);
-        if(brightness != 1.0f)
-            MyImageProcessing.gammaCorrection(mRgba.getNativeObjAddr(),mRgba.getNativeObjAddr(),brightness);
-        if(cameraId == 1) {
-            Mat resultImage = mRgba.clone();
-            MyImageProcessing.flipHorizontally(mRgba.getNativeObjAddr(), resultImage.getNativeObjAddr());
-            return resultImage;
-        }
-
-        return mRgba;
+        return   MyImageProcessing.processImage(mRgba,currentFilter,redValue, greenValue, blueValue, brightness) ;
     }
 
     @Override
@@ -245,6 +173,48 @@ public class CameraActivity extends Activity implements CameraBridgeViewBase.CvC
     }
 
 
+    // Swap Camera
+    public void onSwapCamera(View view) {
+        cameraId = cameraId^1;
+        mRetainedFragment.setCameraId(cameraId);
+        ImageButton flashLightButton = findViewById(R.id.flashlight);
+        if(cameraId == 1)
+            flashLightButton.setVisibility(View.GONE);
+        else
+            flashLightButton.setVisibility(View.VISIBLE);
+        javaCameraView.disableView();
+        javaCameraView.setCameraIndex(cameraId);
+        javaCameraView.enableView();
+    }
+
+
+    // FlashLight
+    public void onFlashlight(View view) {
+        flashMode  = (flashMode + 1)%3;
+        mRetainedFragment.setFlashMode(flashMode);
+        setFlashModeImage();
+    }
+
+    private void setFlashModeImage(){
+        if(cameraId == 0) {
+            flashMode = mRetainedFragment.getFlashMode();
+            ImageButton imageButton = findViewById(R.id.flashlight);
+            if (flashMode == FLASH_MODE_OFF) {
+                javaCameraView.turnTheFlashOff();
+                imageButton.setImageResource(R.drawable.flash_light_off);
+            }
+            if (flashMode == FLASH_MODE_AUTO) {
+                javaCameraView.turnTheFlashAuto();
+                imageButton.setImageResource(R.drawable.flash_light_auto);
+            }
+            if (flashMode == FLASH_MODE_ON) {
+                javaCameraView.turnTheFlashOn();
+                imageButton.setImageResource(R.drawable.flash_light_on);
+            }
+        }
+    }
+
+
     //Filtres
     public void onNormalFilterClicked(View view) {
         changeFilter("Normal");
@@ -252,6 +222,14 @@ public class CameraActivity extends Activity implements CameraBridgeViewBase.CvC
 
     public void onSepiaFilterClicked(View view) {
         changeFilter("Sepia");
+    }
+
+    public void onGrayFilterClicked(View view) {
+        changeFilter("Gray");
+    }
+
+    public void onNegativeFilterClicked(View view) {
+        changeFilter("Negative");
     }
 
     public void onSketchFilterClicked(View view) {
@@ -310,127 +288,11 @@ public class CameraActivity extends Activity implements CameraBridgeViewBase.CvC
         changeFilter("HEqV");
     }
 
-    public void onNewFilterClicked(View view) {
-        changeFilter("New");
-    }
 
     private void changeFilter(String filterName){
         currentFilter = filterName;
         mRetainedFragment.setFilter(currentFilter);
     }
-
-
-    // Swap Camera
-    public void onSwapCamera(View view) {
-        cameraId = cameraId^1;
-        mRetainedFragment.setCameraId(cameraId);
-        ImageButton flashLightButton = findViewById(R.id.flashlight);
-        if(cameraId == 1)
-            flashLightButton.setVisibility(View.GONE);
-        else
-            flashLightButton.setVisibility(View.VISIBLE);
-        javaCameraView.disableView();
-        javaCameraView.setCameraIndex(cameraId);
-        javaCameraView.enableView();
-    }
-
-
-    // FlashLight
-    public void onFlashlight(View view) {
-        flashMode  = (flashMode + 1)%3;
-        mRetainedFragment.setFlashMode(flashMode);
-        setFlashModeImage();
-    }
-
-    private void setFlashModeImage(){
-        if(cameraId == 0) {
-            flashMode = mRetainedFragment.getFlashMode();
-            ImageButton imageButton = findViewById(R.id.flashlight);
-            if (flashMode == FLASH_MODE_OFF) {
-                javaCameraView.turnTheFlashOff();
-                imageButton.setImageResource(R.drawable.flash_light_off);
-            }
-            if (flashMode == FLASH_MODE_AUTO) {
-                javaCameraView.turnTheFlashAuto();
-                imageButton.setImageResource(R.drawable.flash_light_auto);
-            }
-            if (flashMode == FLASH_MODE_ON) {
-                javaCameraView.turnTheFlashOn();
-                imageButton.setImageResource(R.drawable.flash_light_on);
-            }
-        }
-    }
-
-    public static Mat processImage(Mat image, String currentFilter ,int redValue,int greenValue,int blueValue,float brightness){
-        switch (currentFilter) {
-            case "Sepia":
-                MyImageProcessing.sepiaFilter(image.getNativeObjAddr(),image.getNativeObjAddr());
-                break;
-            case "Red":
-                MyImageProcessing.redTonedFillter(image.getNativeObjAddr(),image.getNativeObjAddr(),8.0f);
-                break;
-            case "Green":
-                MyImageProcessing.greenTonedFillter(image.getNativeObjAddr(),image.getNativeObjAddr(),8.0f);
-                break;
-            case "Blue":
-                MyImageProcessing.blueTonedFillter(image.getNativeObjAddr(),image.getNativeObjAddr(),8.0f);
-                break;
-            case "Magenta":
-                MyImageProcessing.redTonedFillter(image.getNativeObjAddr(),image.getNativeObjAddr(),8.0f);
-                MyImageProcessing.blueTonedFillter(image.getNativeObjAddr(),image.getNativeObjAddr(),8.0f);
-                //changeRGBChannels(image.getNativeObjAddr(),image.getNativeObjAddr(),40,0,40);
-                break;
-            case "Cartoon":
-                MyImageProcessing.cartoonFilter(image.getNativeObjAddr(),image.getNativeObjAddr());
-                Imgproc.cvtColor(image, image, Imgproc.COLOR_GRAY2RGB, 4);
-                break;
-            case "Sketch":
-                MyImageProcessing.sketchFilter(image.getNativeObjAddr(),image.getNativeObjAddr());
-                Imgproc.cvtColor(image, image, Imgproc.COLOR_GRAY2RGB, 4);
-                break;
-            case "Canny":
-                Imgproc.cvtColor(image, image, Imgproc.COLOR_RGB2GRAY, 4);
-                Imgproc.Canny(image, image, 80, 100);
-                Imgproc.cvtColor(image, image, Imgproc.COLOR_GRAY2RGB, 4);
-                break;
-            case "Winter":
-                MyImageProcessing.colorMapFilter(image.getNativeObjAddr(), image.getNativeObjAddr(),0);
-                break;
-            case "Pink":
-                MyImageProcessing.colorMapFilter(image.getNativeObjAddr(), image.getNativeObjAddr(),1);
-                break;
-            case "Hot":
-                MyImageProcessing.colorMapFilter(image.getNativeObjAddr(), image.getNativeObjAddr(),5);
-                break;
-            case "Bone":
-                MyImageProcessing.colorMapFilter(image.getNativeObjAddr(), image.getNativeObjAddr(),10);
-                break;
-            case "Ocean":
-                MyImageProcessing.colorMapFilter(image.getNativeObjAddr(), image.getNativeObjAddr(),11);
-                break;
-            case "HEqY":
-                MyImageProcessing.histogramEqualizationYCbCr(image.getNativeObjAddr(), image.getNativeObjAddr(),0);
-                break;
-            case "HEqCb":
-                MyImageProcessing.histogramEqualizationYCbCr(image.getNativeObjAddr(), image.getNativeObjAddr(),1);
-                break;
-            case "HEqS":
-                MyImageProcessing.histogramEqualizationHSV(image.getNativeObjAddr(),image.getNativeObjAddr(),1);
-                break;
-            case "HEqV":
-                MyImageProcessing.histogramEqualizationHSV(image.getNativeObjAddr(),image.getNativeObjAddr(),2);
-                break;
-            case "New":
-                MyImageProcessing.newFilter(image.getNativeObjAddr(),image.getNativeObjAddr(),2);
-                break;
-        }
-        MyImageProcessing.changeRGBChannels(image.getNativeObjAddr(),image.getNativeObjAddr(),redValue,greenValue,blueValue);
-        MyImageProcessing.gammaCorrection(image.getNativeObjAddr(),image.getNativeObjAddr(),brightness);
-        return image;
-    }
-
-
-
 
 
 }
