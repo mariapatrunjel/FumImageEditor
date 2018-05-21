@@ -8,6 +8,18 @@
     android:background="@color/colorPrimary"
     tools:context="com.editor.image.maria.funimageeditor.activities.MainActivity">
 
+    <com.facebook.share.widget.ShareButton
+        android:id="@+id/fb_share_button"
+        android:layout_width="86dp"
+        android:layout_height="27dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/imageView"
+        app:layout_constraintEnd_toStartOf="@+id/cameraActivityButton"
+        app:layout_constraintStart_toEndOf="@+id/undo"
+        app:layout_constraintTop_toTopOf="parent" />
     <ImageButton
         android:id="@+id/cameraActivityButton"
         android:layout_width="50dp"

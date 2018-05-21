@@ -28,6 +28,10 @@ import com.editor.image.maria.funimageeditor.utils.ModifiersList;
 import com.editor.image.maria.funimageeditor.utils.MyImageProcessing;
 import com.editor.image.maria.funimageeditor.utils.Photo;
 import com.editor.image.maria.funimageeditor.R;
+import com.facebook.share.model.SharePhoto;
+import com.facebook.share.model.SharePhotoContent;
+import com.facebook.share.widget.ShareButton;
+
 import org.opencv.android.OpenCVLoader;
 import org.opencv.core.Mat;
 import org.opencv.android.Utils;
@@ -94,7 +98,6 @@ public class MainActivity extends Activity {
         setImageViewOnTouchListener();
         changeView();
         changeTransformedPicture();
-
 
         if(modifierList.isEmpty()) {
             ImageButton undo = findViewById(R.id.undo);
@@ -355,6 +358,19 @@ public class MainActivity extends Activity {
     }
 
 
+    private void setShareFacebook(Bitmap image){
+        SharePhoto photo = new SharePhoto.Builder()
+                .setBitmap(image)
+                .build();
+        SharePhotoContent content = new SharePhotoContent.Builder()
+                .addPhoto(photo)
+                .build();
+
+        ShareButton shareButton = findViewById(R.id.fb_share_button);
+        shareButton.setShareContent(content);
+    }
+
+
     // Undo
     public void onUndoClicked(View view){
         if(!modifierList.isEmpty()){
@@ -605,6 +621,7 @@ public class MainActivity extends Activity {
     }
 
 
+
     // Modificare imagine ( Thread )
     private class ModifyImage extends AsyncTask<String,Integer,Bitmap> {
         @Override
@@ -624,6 +641,7 @@ public class MainActivity extends Activity {
             imgPicture.setImageBitmap(result);
             ProgressBar spinner = findViewById(R.id.progressBar);
             spinner.setVisibility(View.GONE);
+            setShareFacebook(result);
         }
     }
 
