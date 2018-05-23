@@ -1,6 +1,7 @@
 package  com.editor.image.maria.funimageeditor.activities;
 import android.app.Activity;
 import android.app.FragmentManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -8,6 +9,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.constraint.ConstraintLayout;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -36,6 +38,7 @@ import org.opencv.android.OpenCVLoader;
 import org.opencv.core.Mat;
 import org.opencv.android.Utils;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -204,11 +207,39 @@ public class MainActivity extends Activity {
 
 
     // Menu
+
+    // Salvare
     public void onSaveButtonClicked(View view) {
         com.editor.image.maria.funimageeditor.utils.Utils.saveImage(this,getModifiedImage(currentFilter,redValue,greenValue,blueValue,brightness));
         Toast toast = Toast.makeText(this, "Image saved", Toast.LENGTH_SHORT);
         toast.show();
     }
+
+
+    // Share
+    public void onShareButtonClicked(View view) {
+
+        Intent i = new Intent(Intent.ACTION_SEND);
+
+        i.setType("image/*");
+        i.putExtra(Intent.EXTRA_STREAM, getImageUri(this,getModifiedImage(currentFilter,redValue,greenValue,blueValue,brightness)));
+        try {
+            startActivity(Intent.createChooser(i, "My Profile ..."));
+        } catch (android.content.ActivityNotFoundException ex) {
+            ex.printStackTrace();
+        }
+
+
+    }
+
+    private Uri getImageUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
+    }
+
 
 
     // Apasare menu filters
@@ -358,6 +389,8 @@ public class MainActivity extends Activity {
     }
 
 
+
+    //Facebook Share
     private void setShareFacebook(Bitmap image){
         SharePhoto photo = new SharePhoto.Builder()
                 .setBitmap(image)

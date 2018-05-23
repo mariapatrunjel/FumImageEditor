@@ -2,9 +2,12 @@ package  com.editor.image.maria.funimageeditor.activities;
 
 import android.app.Activity;
 import android.app.FragmentManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -12,6 +15,8 @@ import com.editor.image.maria.funimageeditor.retained.fragments.ShowPhotoViewRet
 import com.editor.image.maria.funimageeditor.utils.Photo;
 import com.editor.image.maria.funimageeditor.R;
 import com.editor.image.maria.funimageeditor.utils.Utils;
+
+import java.io.ByteArrayOutputStream;
 
 public class ShowPhotoActivity extends Activity {
     private Bitmap currentImage;
@@ -47,7 +52,7 @@ public class ShowPhotoActivity extends Activity {
         imgPicture.setImageBitmap(currentImage);
     }
 
-    public void onEditClicked(View view){
+    public void onEditButtonClicked(View view){
         Photo photo = Photo.getInstance();
         photo.setImage(currentImage);
 
@@ -55,8 +60,32 @@ public class ShowPhotoActivity extends Activity {
         this.startActivity(intent);
     }
 
-    public void onSaveClicked(View view){
+    public void onSaveButtonClicked(View view){
        Utils.saveImage(this,currentImage);
         finish();
     }
+
+    public void onShareButtonClicked(View view) {
+
+        Intent i = new Intent(Intent.ACTION_SEND);
+
+        i.setType("image/*");
+        i.putExtra(Intent.EXTRA_STREAM, getImageUri(this,currentImage));
+        try {
+            startActivity(Intent.createChooser(i, "My Profile ..."));
+        } catch (android.content.ActivityNotFoundException ex) {
+
+            ex.printStackTrace();
+        }
+
+
+    }
+    private Uri getImageUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
+    }
+
 }
