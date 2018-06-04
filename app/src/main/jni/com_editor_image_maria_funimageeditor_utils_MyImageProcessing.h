@@ -34,6 +34,22 @@ JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageP
 
 /*
  * Class:     com_editor_image_maria_funimageeditor_utils_MyImageProcessing
+ * Method:    negativeFilter
+ * Signature: (JJ)V
+ */
+JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageProcessing_negativeFilter
+  (JNIEnv *, jclass, jlong, jlong);
+
+/*
+ * Class:     com_editor_image_maria_funimageeditor_utils_MyImageProcessing
+ * Method:    binaryFilter
+ * Signature: (JJ)V
+ */
+JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageProcessing_binaryFilter
+  (JNIEnv *, jclass, jlong, jlong);
+
+/*
+ * Class:     com_editor_image_maria_funimageeditor_utils_MyImageProcessing
  * Method:    sepiaFilter
  * Signature: (JJ)V
  */
@@ -74,35 +90,27 @@ JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageP
 
 /*
  * Class:     com_editor_image_maria_funimageeditor_utils_MyImageProcessing
- * Method:    redTonedFillter
+ * Method:    redTonedFilter
  * Signature: (JJD)V
  */
-JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageProcessing_redTonedFillter
+JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageProcessing_redTonedFilter
   (JNIEnv *, jclass, jlong, jlong, jdouble);
 
 /*
  * Class:     com_editor_image_maria_funimageeditor_utils_MyImageProcessing
- * Method:    greenTonedFillter
+ * Method:    greenTonedFilter
  * Signature: (JJD)V
  */
-JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageProcessing_greenTonedFillter
+JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageProcessing_greenTonedFilter
   (JNIEnv *, jclass, jlong, jlong, jdouble);
 
 /*
  * Class:     com_editor_image_maria_funimageeditor_utils_MyImageProcessing
- * Method:    blueTonedFillter
+ * Method:    blueTonedFilter
  * Signature: (JJD)V
  */
-JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageProcessing_blueTonedFillter
+JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageProcessing_blueTonedFilter
   (JNIEnv *, jclass, jlong, jlong, jdouble);
-
-/*
- * Class:     com_editor_image_maria_funimageeditor_utils_MyImageProcessing
- * Method:    negativeFillter
- * Signature: (JJ)V
- */
-JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageProcessing_negativeFillter
-  (JNIEnv *, jclass, jlong, jlong);
 
 /*
  * Class:     com_editor_image_maria_funimageeditor_utils_MyImageProcessing

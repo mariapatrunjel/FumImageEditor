@@ -168,6 +168,8 @@
         android:layout_marginTop="8dp"
         android:backgroundTint="@android:color/black"
         android:max="40"
+        android:splitTrack="false"
+        android:rotation="180"
         android:thumbTint="@android:color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"

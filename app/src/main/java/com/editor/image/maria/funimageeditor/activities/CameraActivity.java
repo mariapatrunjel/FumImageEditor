@@ -137,7 +137,9 @@ public class CameraActivity extends Activity implements CameraBridgeViewBase.CvC
     @Override
     public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
         mRgba = inputFrame.rgba();
-        return   MyImageProcessing.processImage(mRgba,currentFilter,redValue, greenValue, blueValue, brightness) ;
+        if(cameraId == 1)
+            return   MyImageProcessing.processImage(MyImageProcessing.flipImageHorizontally(mRgba),currentFilter,redValue, greenValue, blueValue, brightness);
+        return   MyImageProcessing.processImage(mRgba,currentFilter,redValue, greenValue, blueValue, brightness);
     }
 
     @Override
@@ -232,6 +234,10 @@ public class CameraActivity extends Activity implements CameraBridgeViewBase.CvC
         changeFilter("Negative");
     }
 
+    public void onBinaryFilterClicked(View view) {
+        changeFilter("Binary");
+    }
+
     public void onSketchFilterClicked(View view) {
         changeFilter("Sketch");
     }
@@ -274,10 +280,6 @@ public class CameraActivity extends Activity implements CameraBridgeViewBase.CvC
 
     public void onHEqYFilterClicked(View view) {
         changeFilter("HEqY");
-    }
-
-    public void onHEqCrFilterClicked(View view) {
-        changeFilter("HEqCr");
     }
 
     public void onHEqSFilterClicked(View view) {

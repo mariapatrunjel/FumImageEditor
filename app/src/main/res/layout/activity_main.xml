@@ -380,19 +380,6 @@
                     android:scaleType="fitXY"
                     android:src="@drawable/filter_enchante"/>
 
-                <ImageButton
-                    android:id="@+id/hEqCrFilterButton"
-                    android:layout_width="60dp"
-                    android:layout_height="55dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:adjustViewBounds="true"
-                    android:background="#00000000"
-                    android:contentDescription="@null"
-                    android:cropToPadding="false"
-                    android:onClick="onHEqCrFilterClicked"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/filter_equalize"/>
 
                 <ImageButton
                     android:id="@+id/hEqSFilterButton"
@@ -505,6 +492,19 @@
                     android:onClick="onCannyFilterClicked"
                     android:scaleType="fitXY"
                     android:src="@drawable/filter_canny"/>
+                <ImageButton
+                    android:id="@+id/binaryFilterButton"
+                    android:layout_width="60dp"
+                    android:layout_height="55dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:adjustViewBounds="true"
+                    android:background="#00000000"
+                    android:contentDescription="@null"
+                    android:cropToPadding="false"
+                    android:onClick="onBinaryFilterClicked"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/filter_binary"/>
 
                 <ImageButton
                     android:id="@+id/grayFilterButton"
@@ -778,7 +778,8 @@
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="8dp"
                 android:backgroundTint="@android:color/black"
-                android:max="40"
+                android:splitTrack="false"
+                android:rotation="180"
                 android:thumbTint="@android:color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"

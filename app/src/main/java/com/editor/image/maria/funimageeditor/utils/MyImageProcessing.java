@@ -16,7 +16,9 @@ public class MyImageProcessing {
     public static native void gammaCorrection(long addrRgba, long addrResultImage, float gamma);
 
 
-    public static native void negativeFillter(long addrRgba, long addrResultImagea);
+    public static native void negativeFilter(long addrRgba, long addrResultImagea);
+
+    public static native void binaryFilter(long addrRgba, long addrResultImagea);
 
     public static native void sepiaFilter(long addrRgba, long addrResultImage);
 
@@ -32,11 +34,11 @@ public class MyImageProcessing {
 
 
 
-    public static native void redTonedFillter(long addrRgba, long addrResultImage, double alpha);
+    public static native void redTonedFilter(long addrRgba, long addrResultImage, double alpha);
 
-    public static native void greenTonedFillter(long addrRgba, long addrResultImage, double alpha);
+    public static native void greenTonedFilter(long addrRgba, long addrResultImage, double alpha);
 
-    public static native void blueTonedFillter(long addrRgba, long addrResultImage, double alpha);
+    public static native void blueTonedFilter(long addrRgba, long addrResultImage, double alpha);
 
 
 
@@ -54,17 +56,17 @@ public class MyImageProcessing {
                 sepiaFilter(image.getNativeObjAddr(), image.getNativeObjAddr());
                 break;
             case "Red":
-                redTonedFillter(image.getNativeObjAddr(), image.getNativeObjAddr(), 8.0f);
+                redTonedFilter(image.getNativeObjAddr(), image.getNativeObjAddr(), 8.0f);
                 break;
             case "Green":
-                greenTonedFillter(image.getNativeObjAddr(), image.getNativeObjAddr(), 8.0f);
+                greenTonedFilter(image.getNativeObjAddr(), image.getNativeObjAddr(), 8.0f);
                 break;
             case "Blue":
-                blueTonedFillter(image.getNativeObjAddr(), image.getNativeObjAddr(), 8.0f);
+                blueTonedFilter(image.getNativeObjAddr(), image.getNativeObjAddr(), 8.0f);
                 break;
             case "Magenta":
-                redTonedFillter(image.getNativeObjAddr(), image.getNativeObjAddr(), 8.0f);
-                blueTonedFillter(image.getNativeObjAddr(), image.getNativeObjAddr(), 8.0f);
+                redTonedFilter(image.getNativeObjAddr(), image.getNativeObjAddr(), 8.0f);
+                blueTonedFilter(image.getNativeObjAddr(), image.getNativeObjAddr(), 8.0f);
                 break;
             case "Sketch":
                 sketchFilter(image.getNativeObjAddr(), image.getNativeObjAddr());
@@ -93,9 +95,6 @@ public class MyImageProcessing {
             case "HEqY":
                 histogramEqualizationYCbCr(image.getNativeObjAddr(), image.getNativeObjAddr(), 0);
                 break;
-            case "HEqCb":
-                histogramEqualizationYCbCr(image.getNativeObjAddr(), image.getNativeObjAddr(), 1);
-                break;
             case "HEqS":
                 histogramEqualizationHSV(image.getNativeObjAddr(), image.getNativeObjAddr(), 1);
                 break;
@@ -108,12 +107,12 @@ public class MyImageProcessing {
                 break;
             case "Negative":
                 Imgproc.cvtColor(image, image, Imgproc.COLOR_RGB2GRAY, 4);
-                negativeFillter(image.getNativeObjAddr(), image.getNativeObjAddr());
+                negativeFilter(image.getNativeObjAddr(), image.getNativeObjAddr());
                 Imgproc.cvtColor(image, image, Imgproc.COLOR_GRAY2RGB, 4);
                 break;
-            case "New":
+            case "Binary":
                 Imgproc.cvtColor(image, image, Imgproc.COLOR_RGB2GRAY, 4);
-                negativeFillter(image.getNativeObjAddr(), image.getNativeObjAddr());
+                binaryFilter(image.getNativeObjAddr(), image.getNativeObjAddr());
                 Imgproc.cvtColor(image, image, Imgproc.COLOR_GRAY2RGB, 4);
                 break;
 
@@ -124,8 +123,6 @@ public class MyImageProcessing {
             gammaCorrection(image.getNativeObjAddr(), image.getNativeObjAddr(), brightness);
         return image;
     }
-
-
 
     public static Mat rotateImage(Mat image, float alpha) {
 

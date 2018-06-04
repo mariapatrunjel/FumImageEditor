@@ -50,6 +50,7 @@ public class MainActivity extends Activity {
     private static final int IMAGE_GALLERY_REQUEST = 20;
     private Bitmap currentImage;
     private Bitmap initialImage;
+    private Bitmap newImage;
     private String currentView = "Disable";
 
     private String currentFilter = "Normal";
@@ -101,7 +102,6 @@ public class MainActivity extends Activity {
         setImageViewOnTouchListener();
         changeView();
         changeTransformedPicture();
-
         if(modifierList.isEmpty()) {
             ImageButton undo = findViewById(R.id.undo);
             undo.setVisibility(View.GONE);
@@ -134,6 +134,8 @@ public class MainActivity extends Activity {
 
                         ImageView imgPicture = findViewById(R.id.imageView);
                         imgPicture.setImageBitmap(currentImage);
+                        setShareFacebook(currentImage);
+                        newImage = currentImage;
 
                         ImageButton undo = findViewById(R.id.undo);
                         undo.setVisibility(View.GONE);
@@ -185,6 +187,8 @@ public class MainActivity extends Activity {
 
             ImageView imgPicture = findViewById(R.id.imageView);
             imgPicture.setImageBitmap(currentImage);
+            setShareFacebook(currentImage);
+            newImage = currentImage;
 
             ImageButton undo = findViewById(R.id.undo);
             undo.setVisibility(View.GONE);
@@ -196,6 +200,7 @@ public class MainActivity extends Activity {
             changeSeekBars();
             setSeekBarsListeners();
             setImageViewOnTouchListener();
+
         }
         else {
             initialImage = mRetainedFragment.getInitialImage();
@@ -210,7 +215,7 @@ public class MainActivity extends Activity {
 
     // Salvare
     public void onSaveButtonClicked(View view) {
-        com.editor.image.maria.funimageeditor.utils.Utils.saveImage(this,getModifiedImage(currentFilter,redValue,greenValue,blueValue,brightness));
+        com.editor.image.maria.funimageeditor.utils.Utils.saveImage(this,newImage);
         Toast toast = Toast.makeText(this, "Image saved", Toast.LENGTH_SHORT);
         toast.show();
     }
@@ -222,7 +227,7 @@ public class MainActivity extends Activity {
         Intent i = new Intent(Intent.ACTION_SEND);
 
         i.setType("image/*");
-        i.putExtra(Intent.EXTRA_STREAM, getImageUri(this,getModifiedImage(currentFilter,redValue,greenValue,blueValue,brightness)));
+        i.putExtra(Intent.EXTRA_STREAM, getImageUri(this,newImage));
         try {
             startActivity(Intent.createChooser(i, "My Profile ..."));
         } catch (android.content.ActivityNotFoundException ex) {
@@ -645,7 +650,7 @@ public class MainActivity extends Activity {
                  else if (event.getAction() == MotionEvent.ACTION_UP) {// Button released
                      if(currentImage != null) {
                          ImageView imgPicture = findViewById(R.id.imageView);
-                         imgPicture.setImageBitmap(getModifiedImage(currentFilter, redValue, greenValue, blueValue, brightness));
+                         imgPicture.setImageBitmap(newImage);
                      }
                  }
                  return false;
@@ -675,6 +680,7 @@ public class MainActivity extends Activity {
             ProgressBar spinner = findViewById(R.id.progressBar);
             spinner.setVisibility(View.GONE);
             setShareFacebook(result);
+            newImage = result;
         }
     }
 
@@ -775,6 +781,10 @@ public class MainActivity extends Activity {
         changeFilter("Negative");
     }
 
+    public void onBinaryFilterClicked(View view) {
+        changeFilter("Binary");
+    }
+
     public void onSketchFilterClicked(View view) {
         changeFilter("Sketch");
     }
@@ -817,10 +827,6 @@ public class MainActivity extends Activity {
 
     public void onHEqYFilterClicked(View view) {
         changeFilter("HEqY");
-    }
-
-    public void onHEqCrFilterClicked(View view) {
-        changeFilter("HEqCr");
     }
 
     public void onHEqSFilterClicked(View view) {

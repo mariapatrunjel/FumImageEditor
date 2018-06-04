@@ -14,7 +14,7 @@ JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageP
             if(valueRed<256)
             {
                 if(valueRed>0)
-                    resultImage.data[resultImage.step[0] * i + resultImage.step[1] * j + 0] = valueRed;
+                    resultImage.data[resultImage.step[0] * i + resultImage.step[1] * j + 0] = (uchar)valueRed;
                 else
                     resultImage.data[resultImage.step[0] * i + resultImage.step[1] * j + 0] = 0;
             }
@@ -24,7 +24,7 @@ JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageP
             if(valueGreen<256)
             {
                 if(valueGreen>0)
-                    resultImage.data[resultImage.step[0] * i + resultImage.step[1] * j + 1] = valueGreen;
+                    resultImage.data[resultImage.step[0] * i + resultImage.step[1] * j + 1] = (uchar) valueGreen;
                 else
                     resultImage.data[resultImage.step[0] * i + resultImage.step[1] * j + 1] = 0;
             }
@@ -34,7 +34,7 @@ JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageP
             if(valueBlue<256)
             {
                 if(valueBlue>0)
-                    resultImage.data[resultImage.step[0] * i + resultImage.step[1] * j + 2] = valueBlue;
+                    resultImage.data[resultImage.step[0] * i + resultImage.step[1] * j + 2] = (uchar)valueBlue;
                 else
                     resultImage.data[resultImage.step[0] * i + resultImage.step[1] * j + 2] = 0;
             }
@@ -74,7 +74,7 @@ JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageP
 
 
 
-JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageProcessing_negativeFillter
+JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageProcessing_negativeFilter
         (JNIEnv *, jclass, jlong addrRgba, jlong addrResultImage) {
     Mat &mRgba = *(Mat *) addrRgba;
     Mat &resultImage = *(Mat *) addrResultImage;
@@ -82,6 +82,19 @@ JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageP
         for (int j = 0; j < mRgba.cols; j++) {
             resultImage.data[resultImage.step[0] * i + resultImage.step[1] * j + 0] = (uchar) 255 - mRgba.data[resultImage.step[0] * i + resultImage.step[1] * j ];
         }
+    }
+}
+
+JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageProcessing_binaryFilter
+        (JNIEnv *, jclass, jlong addrRgba, jlong addrResultImage) {
+    Mat &mRgba = *(Mat *) addrRgba;
+    Mat &resultImage = *(Mat *) addrResultImage;
+    for (int i = 0;   i < mRgba.rows; i++) {
+        for (int j = 0; j < mRgba.cols; j++)
+            if(mRgba.data[resultImage.step[0] * i + resultImage.step[1] * j ]<123)
+                resultImage.data[resultImage.step[0] * i + resultImage.step[1] * j + 0] = 0;
+            else
+                resultImage.data[resultImage.step[0] * i + resultImage.step[1] * j + 0] = 255;
     }
 }
 
@@ -183,7 +196,7 @@ JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageP
 
 
 
-JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageProcessing_redTonedFillter
+JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageProcessing_redTonedFilter
         (JNIEnv *, jclass, jlong addrRgba, jlong addrResultImage, jdouble alpha) {
     Mat &mRgba = *(Mat *) addrRgba;
     Mat &resultImage = *(Mat *) addrResultImage;
@@ -212,7 +225,7 @@ JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageP
     }
 }
 
-JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageProcessing_greenTonedFillter
+JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageProcessing_greenTonedFilter
         (JNIEnv *, jclass, jlong addrRgba, jlong addrResultImage, jdouble alpha) {
     Mat &mRgba = *(Mat *) addrRgba;
     Mat &resultImage = *(Mat *) addrResultImage;
@@ -224,7 +237,7 @@ JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageP
 // Change with sin function
     for (int i = 0; i < 256; i++) {
 //double t = i/255.0f;
-        lut[i] = 255.0f * sin(i * M_PI / 510.0f);
+        lut[i] = (uchar)(255.0f * sin(i * M_PI / 510.0f));
         if (lut[i] < 0)
             lut[i] = 0;
         if (lut[i] > 255)
@@ -241,7 +254,7 @@ JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageP
     }
 }
 
-JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageProcessing_blueTonedFillter
+JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageProcessing_blueTonedFilter
         (JNIEnv *, jclass, jlong addrRgba, jlong addrResultImage, jdouble alpha) {
     Mat &mRgba = *(Mat *) addrRgba;
     Mat &resultImage = *(Mat *) addrResultImage;
@@ -277,12 +290,15 @@ JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageP
     Mat &resultImage = *(Mat *) addrResultImage;
     double xCenter = mRgba.rows / 2.0;
     double yCenter = mRgba.cols / 2.0;
+
+    double xCenterNew = resultImage.rows / 2.0;
+    double yCenterNew = resultImage.cols / 2.0;
     double alphaRad = alpha * M_PI / 180.0;
 
     for (double x = 0; x < resultImage.rows ; x++) {
          for (double y = 0; y < resultImage.cols; y++) {
-                double xc=(x-xCenter)*cos(alphaRad)+(y-yCenter)* sin(alphaRad) + xCenter;
-                double yc=-(x-xCenter)*sin(alphaRad)+(y-yCenter)* cos(alphaRad) + yCenter;
+                double xc=(x-xCenterNew)*cos(alphaRad)+(y-yCenterNew)* sin(alphaRad) + xCenter;
+                double yc=-(x-xCenterNew)*sin(alphaRad)+(y-yCenterNew)* cos(alphaRad) + yCenter;
                 if(xc < mRgba.rows - 1.0 && xc>=0.0 && yc>=0.0 && yc<mRgba.cols-1.0 ){
                     int x0 = (int) xc;
                     int y0 = (int) yc;

@@ -136,7 +136,6 @@
                 android:scaleType="fitXY"
                 android:src="@drawable/filter_normal"/>
 
-
             <ImageButton
                 android:id="@+id/hEqYFilterButton"
                 android:layout_width="60dp"
@@ -150,20 +149,6 @@
                 android:onClick="onHEqYFilterClicked"
                 android:scaleType="fitXY"
                 android:src="@drawable/filter_enchante"/>
-
-            <ImageButton
-                android:id="@+id/hEqCrFilterButton"
-                android:layout_width="60dp"
-                android:layout_height="55dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:adjustViewBounds="true"
-                android:background="#00000000"
-                android:contentDescription="@null"
-                android:cropToPadding="false"
-                android:onClick="onHEqCrFilterClicked"
-                android:scaleType="fitXY"
-                android:src="@drawable/filter_equalize"/>
 
             <ImageButton
                 android:id="@+id/hEqSFilterButton"
@@ -276,6 +261,20 @@
                 android:onClick="onCannyFilterClicked"
                 android:scaleType="fitXY"
                 android:src="@drawable/filter_canny"/>
+
+            <ImageButton
+                android:id="@+id/BinaryFilterButton"
+                android:layout_width="60dp"
+                android:layout_height="55dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:adjustViewBounds="true"
+                android:background="#00000000"
+                android:contentDescription="@null"
+                android:cropToPadding="false"
+                android:onClick="onBinaryFilterClicked"
+                android:scaleType="fitXY"
+                android:src="@drawable/filter_binary"/>
 
             <ImageButton
                 android:id="@+id/grayFilterButton"

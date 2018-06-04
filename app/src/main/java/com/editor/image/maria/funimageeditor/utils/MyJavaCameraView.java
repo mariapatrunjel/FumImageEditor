@@ -75,7 +75,10 @@ public class MyJavaCameraView extends JavaCameraView{
                 org.opencv.android.Utils.bitmapToMat(bmp32, image);
 
                 //process image
-                MyImageProcessing.processImage(image, currentFilter, blueValue, greenValue, redValue, brightness);
+                if(cameraId == 1)
+                    MyImageProcessing.processImage(MyImageProcessing.flipImageHorizontally(image),currentFilter,redValue, greenValue, blueValue, brightness);
+                else
+                    MyImageProcessing.processImage(image, currentFilter, blueValue, greenValue, redValue, brightness);
 
                 Bitmap finalBitmap = Utils.matToFinalBitmap(image, getResources().getConfiguration().orientation, cameraId);
 
