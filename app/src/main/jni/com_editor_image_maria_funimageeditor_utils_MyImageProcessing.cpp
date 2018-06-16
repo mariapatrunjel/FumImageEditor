@@ -388,6 +388,253 @@ JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageP
             }
 }
 
+JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageProcessing_twirl
+        (JNIEnv *, jclass, jlong addrRgba, jlong addrResultImage, jdouble alpha, jdouble rmax) {
+    Mat &mRgba = *(Mat *) addrRgba;
+    Mat &resultImage = *(Mat *) addrResultImage;
+    double xCenter = mRgba.rows / 2.0;
+    double yCenter = mRgba.cols / 2.0;
+    double alphaRad = alpha * M_PI / 180.0;
+
+    for (double x = 0; x < mRgba.rows ; x++) {
+        for (double y = 0; y < mRgba.cols; y++) {
+
+            double dx = x - xCenter;
+            double dy = y - yCenter;
+            double r = sqrt(dx*dx + dy*dy);
+            double beta = atan2(dy,dx) + alphaRad * ((rmax - r)/rmax);
+            double xc,yc;
+            if(r<=rmax){
+                xc = xCenter + r * cos(beta);
+                yc = yCenter + r * sin(beta);
+            }else {
+                xc = x;
+                yc = y;
+            }
+            if(xc < mRgba.rows - 1.0 && xc>=0.0 && yc>=0.0 && yc<mRgba.cols-1.0 ){
+                int x0 = (int) xc;
+                int y0 = (int) yc;
+
+                //red
+                double f1r = mRgba.data[mRgba.step[0] * x0 + mRgba.step[1] * y0 + 0];
+                double f2r = mRgba.data[mRgba.step[0] * (x0+1) + mRgba.step[1] * y0 + 0];
+                double f3r = mRgba.data[mRgba.step[0] * x0 + mRgba.step[1] * (y0+1) + 0];
+                double f4r = mRgba.data[mRgba.step[0] * (x0+1) + mRgba.step[1] * (y0+1) + 0];
+                double fy0r = (xc-x0)*(f2r-f1r)+f1r;
+                double fy1r = (xc-x0)*(f4r-f3r)+f3r;
+                double fr = (yc-y0)*(fy1r-fy0r)+fy0r;
+
+                //green
+                double f1g = mRgba.data[mRgba.step[0] * x0 + mRgba.step[1] * y0 + 1];
+                double f2g = mRgba.data[mRgba.step[0] * (x0+1) + mRgba.step[1] * y0 + 1];
+                double f3g = mRgba.data[mRgba.step[0] * x0 + mRgba.step[1] * (y0+1) + 1];
+                double f4g = mRgba.data[mRgba.step[0] * (x0+1) + mRgba.step[1] * (y0+1) + 1];
+                double fy0g = (xc-x0)*(f2g-f1g)+f1g;
+                double fy1g = (xc-x0)*(f4g-f3g)+f3g;
+                double fg = (yc-y0)*(fy1g-fy0g)+fy0g;
+
+                //blue
+                double f1b = mRgba.data[mRgba.step[0] * x0 + mRgba.step[1] * y0 + 2];
+                double f2b = mRgba.data[mRgba.step[0] * (x0+1) + mRgba.step[1] * y0 + 2];
+                double f3b = mRgba.data[mRgba.step[0] * x0 + mRgba.step[1] * (y0+1) + 2];
+                double f4b = mRgba.data[mRgba.step[0] * (x0+1) + mRgba.step[1] * (y0+1) + 2];
+                double fy0b = (xc-x0)*(f2b-f1b)+f1b;
+                double fy1b = (xc-x0)*(f4b-f3b)+f3b;
+                double fb = (yc-y0)*(fy1b-fy0b)+fy0b;
+
+
+                double f1br = mRgba.data[mRgba.step[0] * x0 + mRgba.step[1] * y0 + 3];
+                double f2br = mRgba.data[mRgba.step[0] * (x0+1) + mRgba.step[1] * y0 + 3];
+                double f3br = mRgba.data[mRgba.step[0] * x0 + mRgba.step[1] * (y0+1) + 3];
+                double f4br = mRgba.data[mRgba.step[0] * (x0+1) + mRgba.step[1] * (y0+1) + 3];
+                double fy0br = (xc-x0)*(f2br-f1br)+f1br;
+                double fy1br = (xc-x0)*(f4br-f3br)+f3br;
+                double fbr = (yc-y0)*(fy1br-fy0br)+fy0br;
+
+
+                int i = (int) x;
+                int j = (int) y;
+                resultImage.data[resultImage.step[0] * i + resultImage.step[1] * j + 0] = (uchar) fr;
+                resultImage.data[resultImage.step[0] * i + resultImage.step[1] * j + 1] = (uchar) fg;
+                resultImage.data[resultImage.step[0] * i + resultImage.step[1] * j + 2] = (uchar) fb;
+                resultImage.data[resultImage.step[0] * i + resultImage.step[1] * j + 3] = (uchar) fbr;
+            }
+            else
+            {
+                int i = (int) x;
+                int j = (int) y;
+                resultImage.data[resultImage.step[0] * i + resultImage.step[1] * j + 0] = 0;
+                resultImage.data[resultImage.step[0] * i + resultImage.step[1] * j + 1] = 0;
+                resultImage.data[resultImage.step[0] * i + resultImage.step[1] * j + 2] = 0;
+                resultImage.data[resultImage.step[0] * i + resultImage.step[1] * j + 3] = 255;
+            }
+
+        }
+    }
+}
+JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageProcessing_ripple
+(JNIEnv *, jclass, jlong addrRgba, jlong addrResultImage) {
+    Mat &mRgba = *(Mat *) addrRgba;
+    Mat &resultImage = *(Mat *) addrResultImage;
+
+    double tx = mRgba.rows/4;
+    double ty = mRgba.cols/4;
+
+    double ax = tx/10 ;
+    double ay = ty/10 ;
+    for (double x = 0; x < mRgba.rows; x++) {
+        for (double y = 0; y < mRgba.cols; y++) {
+            double xc = x + ax*sin((2*M_PI*y)/tx);
+            double yc = y + ay*sin((2*M_PI*x)/ty);
+            if (xc < mRgba.rows - 1.0 && xc >= 0.0 && yc >= 0.0 && yc < mRgba.cols - 1.0) {
+                int x0 = (int) xc;
+                int y0 = (int) yc;
+
+                //red
+                double f1r = mRgba.data[mRgba.step[0] * x0 + mRgba.step[1] * y0 + 0];
+                double f2r = mRgba.data[mRgba.step[0] * (x0 + 1) + mRgba.step[1] * y0 + 0];
+                double f3r = mRgba.data[mRgba.step[0] * x0 + mRgba.step[1] * (y0 + 1) + 0];
+                double f4r = mRgba.data[mRgba.step[0] * (x0 + 1) + mRgba.step[1] * (y0 + 1) + 0];
+                double fy0r = (xc - x0) * (f2r - f1r) + f1r;
+                double fy1r = (xc - x0) * (f4r - f3r) + f3r;
+                double fr = (yc - y0) * (fy1r - fy0r) + fy0r;
+
+                //green
+                double f1g = mRgba.data[mRgba.step[0] * x0 + mRgba.step[1] * y0 + 1];
+                double f2g = mRgba.data[mRgba.step[0] * (x0 + 1) + mRgba.step[1] * y0 + 1];
+                double f3g = mRgba.data[mRgba.step[0] * x0 + mRgba.step[1] * (y0 + 1) + 1];
+                double f4g = mRgba.data[mRgba.step[0] * (x0 + 1) + mRgba.step[1] * (y0 + 1) + 1];
+                double fy0g = (xc - x0) * (f2g - f1g) + f1g;
+                double fy1g = (xc - x0) * (f4g - f3g) + f3g;
+                double fg = (yc - y0) * (fy1g - fy0g) + fy0g;
+
+                //blue
+                double f1b = mRgba.data[mRgba.step[0] * x0 + mRgba.step[1] * y0 + 2];
+                double f2b = mRgba.data[mRgba.step[0] * (x0 + 1) + mRgba.step[1] * y0 + 2];
+                double f3b = mRgba.data[mRgba.step[0] * x0 + mRgba.step[1] * (y0 + 1) + 2];
+                double f4b = mRgba.data[mRgba.step[0] * (x0 + 1) + mRgba.step[1] * (y0 + 1) + 2];
+                double fy0b = (xc - x0) * (f2b - f1b) + f1b;
+                double fy1b = (xc - x0) * (f4b - f3b) + f3b;
+                double fb = (yc - y0) * (fy1b - fy0b) + fy0b;
+
+
+                double f1br = mRgba.data[mRgba.step[0] * x0 + mRgba.step[1] * y0 + 3];
+                double f2br = mRgba.data[mRgba.step[0] * (x0 + 1) + mRgba.step[1] * y0 + 3];
+                double f3br = mRgba.data[mRgba.step[0] * x0 + mRgba.step[1] * (y0 + 1) + 3];
+                double f4br = mRgba.data[mRgba.step[0] * (x0 + 1) + mRgba.step[1] * (y0 + 1) + 3];
+                double fy0br = (xc - x0) * (f2br - f1br) + f1br;
+                double fy1br = (xc - x0) * (f4br - f3br) + f3br;
+                double fbr = (yc - y0) * (fy1br - fy0br) + fy0br;
+
+
+                int i = (int) x;
+                int j = (int) y;
+                resultImage.data[resultImage.step[0] * i + resultImage.step[1] * j +
+                                 0] = (uchar) fr;
+                resultImage.data[resultImage.step[0] * i + resultImage.step[1] * j +
+                                 1] = (uchar) fg;
+                resultImage.data[resultImage.step[0] * i + resultImage.step[1] * j +
+                                 2] = (uchar) fb;
+                resultImage.data[resultImage.step[0] * i + resultImage.step[1] * j +
+                                 3] = (uchar) fbr;
+            } else {
+                int i = (int) x;
+                int j = (int) y;
+                resultImage.data[resultImage.step[0] * i + resultImage.step[1] * j + 0] = 0;
+                resultImage.data[resultImage.step[0] * i + resultImage.step[1] * j + 1] = 0;
+                resultImage.data[resultImage.step[0] * i + resultImage.step[1] * j + 2] = 0;
+                resultImage.data[resultImage.step[0] * i + resultImage.step[1] * j + 3] = 255;
+            }
+
+        }
+    }
+}
+
+JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageProcessing_spherical
+        (JNIEnv *, jclass, jlong addrRgba, jlong addrResultImage,jdouble rmax, jdouble p) {
+    Mat &mRgba = *(Mat *) addrRgba;
+    Mat &resultImage = *(Mat *) addrResultImage;
+    double xCenter = mRgba.rows / 2.0;
+    double yCenter = mRgba.cols / 2.0;
+    for (double x = 0; x < mRgba.rows ; x++) {
+        for (double y = 0; y < mRgba.cols; y++) {
+
+            double dx = x - xCenter;
+            double dy = y - yCenter;
+            double r = sqrt(dx*dx + dy*dy);
+            double z = sqrt(rmax*rmax - r*r);
+
+            double betaX = (1-1/p)*asin(dx/sqrt(dx*dx+z*z));
+            double betaY = (1-1/p)*asin(dy/sqrt(dy*dy+z*z));
+            double xc,yc;
+            if(r<=rmax){
+                xc = x - z* tan(betaX);
+                yc = y - z* tan(betaY);
+            }else {
+                xc = x;
+                yc = y;
+            }
+            if(xc < mRgba.rows - 1.0 && xc>=0.0 && yc>=0.0 && yc<mRgba.cols-1.0 ){
+                int x0 = (int) xc;
+                int y0 = (int) yc;
+
+                //red
+                double f1r = mRgba.data[mRgba.step[0] * x0 + mRgba.step[1] * y0 + 0];
+                double f2r = mRgba.data[mRgba.step[0] * (x0+1) + mRgba.step[1] * y0 + 0];
+                double f3r = mRgba.data[mRgba.step[0] * x0 + mRgba.step[1] * (y0+1) + 0];
+                double f4r = mRgba.data[mRgba.step[0] * (x0+1) + mRgba.step[1] * (y0+1) + 0];
+                double fy0r = (xc-x0)*(f2r-f1r)+f1r;
+                double fy1r = (xc-x0)*(f4r-f3r)+f3r;
+                double fr = (yc-y0)*(fy1r-fy0r)+fy0r;
+
+                //green
+                double f1g = mRgba.data[mRgba.step[0] * x0 + mRgba.step[1] * y0 + 1];
+                double f2g = mRgba.data[mRgba.step[0] * (x0+1) + mRgba.step[1] * y0 + 1];
+                double f3g = mRgba.data[mRgba.step[0] * x0 + mRgba.step[1] * (y0+1) + 1];
+                double f4g = mRgba.data[mRgba.step[0] * (x0+1) + mRgba.step[1] * (y0+1) + 1];
+                double fy0g = (xc-x0)*(f2g-f1g)+f1g;
+                double fy1g = (xc-x0)*(f4g-f3g)+f3g;
+                double fg = (yc-y0)*(fy1g-fy0g)+fy0g;
+
+                //blue
+                double f1b = mRgba.data[mRgba.step[0] * x0 + mRgba.step[1] * y0 + 2];
+                double f2b = mRgba.data[mRgba.step[0] * (x0+1) + mRgba.step[1] * y0 + 2];
+                double f3b = mRgba.data[mRgba.step[0] * x0 + mRgba.step[1] * (y0+1) + 2];
+                double f4b = mRgba.data[mRgba.step[0] * (x0+1) + mRgba.step[1] * (y0+1) + 2];
+                double fy0b = (xc-x0)*(f2b-f1b)+f1b;
+                double fy1b = (xc-x0)*(f4b-f3b)+f3b;
+                double fb = (yc-y0)*(fy1b-fy0b)+fy0b;
+
+
+                double f1br = mRgba.data[mRgba.step[0] * x0 + mRgba.step[1] * y0 + 3];
+                double f2br = mRgba.data[mRgba.step[0] * (x0+1) + mRgba.step[1] * y0 + 3];
+                double f3br = mRgba.data[mRgba.step[0] * x0 + mRgba.step[1] * (y0+1) + 3];
+                double f4br = mRgba.data[mRgba.step[0] * (x0+1) + mRgba.step[1] * (y0+1) + 3];
+                double fy0br = (xc-x0)*(f2br-f1br)+f1br;
+                double fy1br = (xc-x0)*(f4br-f3br)+f3br;
+                double fbr = (yc-y0)*(fy1br-fy0br)+fy0br;
+
+
+                int i = (int) x;
+                int j = (int) y;
+                resultImage.data[resultImage.step[0] * i + resultImage.step[1] * j + 0] = (uchar) fr;
+                resultImage.data[resultImage.step[0] * i + resultImage.step[1] * j + 1] = (uchar) fg;
+                resultImage.data[resultImage.step[0] * i + resultImage.step[1] * j + 2] = (uchar) fb;
+                resultImage.data[resultImage.step[0] * i + resultImage.step[1] * j + 3] = (uchar) fbr;
+            }
+            else
+            {
+                int i = (int) x;
+                int j = (int) y;
+                resultImage.data[resultImage.step[0] * i + resultImage.step[1] * j + 0] = 0;
+                resultImage.data[resultImage.step[0] * i + resultImage.step[1] * j + 1] = 0;
+                resultImage.data[resultImage.step[0] * i + resultImage.step[1] * j + 2] = 0;
+                resultImage.data[resultImage.step[0] * i + resultImage.step[1] * j + 3] = 255;
+            }
+
+        }
+    }
+}
 /*
 JNIEXPORT void JNICALL Java_com_editor_image_maria_funimageeditor_utils_MyImageProcessing_cartoonFilter
         (JNIEnv *, jclass, jlong addrRgba, jlong addrResultImage) {

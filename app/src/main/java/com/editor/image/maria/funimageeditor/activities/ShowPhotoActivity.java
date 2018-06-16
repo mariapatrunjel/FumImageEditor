@@ -14,7 +14,7 @@ import android.widget.ImageView;
 import com.editor.image.maria.funimageeditor.retained.fragments.ShowPhotoViewRetainedFragment;
 import com.editor.image.maria.funimageeditor.utils.Photo;
 import com.editor.image.maria.funimageeditor.R;
-import com.editor.image.maria.funimageeditor.utils.Utils;
+import com.editor.image.maria.funimageeditor.utils.ImageSaver;
 
 import java.io.ByteArrayOutputStream;
 
@@ -61,7 +61,7 @@ public class ShowPhotoActivity extends Activity {
     }
 
     public void onSaveButtonClicked(View view){
-       Utils.saveImage(this,currentImage);
+        ImageSaver.saveImage(this,currentImage);
         finish();
     }
 
@@ -80,6 +80,7 @@ public class ShowPhotoActivity extends Activity {
 
 
     }
+
     private Uri getImageUri(Context inContext, Bitmap inImage) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);

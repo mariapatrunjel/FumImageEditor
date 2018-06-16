@@ -56,17 +56,16 @@ public final class ModifiersList {
     }
 
     public GeometricTransform getLastGeometricTransform() {
-        GeometricTransform geometricTransform = new GeometricTransform(0.0f, false, false);
+        GeometricTransform geometricTransform = new GeometricTransform(0.0f, false, false,0.0f,0,false,0);
 
-        Boolean rotation, flippedvertically, flippedOrizontaly;
-        rotation = flippedvertically = flippedOrizontaly = false;
+        Boolean rotation, flippedvertically, flippedOrizontaly,twirlAlpha,twirlRadius,rippled,sphericalRadius;
+        rotation = flippedvertically = flippedOrizontaly = twirlAlpha=twirlRadius=rippled=sphericalRadius=false;
 
         for (int i = list.size() - 1; i >= 0; i--) {
             if (list.get(i).getName().equals("Rotation") && !rotation) {
                 geometricTransform.setRotation(Float.parseFloat(list.get(i).getValue()));
                 rotation = true;
             }
-
             if (list.get(i).getName().equals("FlippedVertically") && !flippedvertically) {
                 geometricTransform.setFlippedVertically(Boolean.parseBoolean(list.get(i).getValue()));
                 flippedvertically = true;
@@ -75,7 +74,23 @@ public final class ModifiersList {
                 geometricTransform.setFlippedHorizontally(Boolean.parseBoolean(list.get(i).getValue()));
                 flippedOrizontaly = true;
             }
-            if (rotation && flippedvertically && flippedOrizontaly)
+            if (list.get(i).getName().equals("TwirlAlpha") && !twirlAlpha) {
+                geometricTransform.setTwirledAlpha(Float.parseFloat(list.get(i).getValue()));
+                twirlAlpha = true;
+            }
+            if (list.get(i).getName().equals("TwirlRadius") && !twirlRadius) {
+                geometricTransform.setTwirledRadius(Integer.parseInt(list.get(i).getValue()));
+                twirlRadius = true;
+            }
+            if (list.get(i).getName().equals("Rippled") && !rippled) {
+                geometricTransform.setRippled(Boolean.parseBoolean(list.get(i).getValue()));
+                rippled = true;
+            }
+            if (list.get(i).getName().equals("SphericalRadius") && !sphericalRadius) {
+                geometricTransform.setSphericalRadius(Integer.parseInt(list.get(i).getValue()));
+                sphericalRadius = true;
+            }
+            if (rotation && flippedvertically && flippedOrizontaly && twirlAlpha && twirlRadius&&rippled && sphericalRadius)
                 break;
         }
         return geometricTransform;

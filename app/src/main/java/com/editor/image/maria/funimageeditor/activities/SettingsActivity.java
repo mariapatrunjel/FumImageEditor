@@ -48,7 +48,7 @@ public class SettingsActivity extends Activity {
 
     }
 
-    public void onClickResetButton(View view){
+    public void onResetButtonClicked(View view){
         redValue = 0;
         greenValue = 0;
         blueValue = 0;

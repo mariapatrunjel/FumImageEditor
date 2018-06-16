@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -20,13 +19,16 @@
         app:layout_constraintEnd_toStartOf="@+id/cameraActivityButton"
         app:layout_constraintStart_toEndOf="@+id/undo"
         app:layout_constraintTop_toTopOf="parent" />
+
     <ImageButton
         android:id="@+id/cameraActivityButton"
         android:layout_width="50dp"
         android:layout_height="40dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:adjustViewBounds="true"
         android:background="#00000000"
         android:contentDescription="@null"
@@ -34,18 +36,16 @@
         android:onClick="onCameraActivityButtonClicked"
         android:scaleType="fitXY"
         android:src="@drawable/camera_activity_photo"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="8dp"
-        app:layout_constraintLeft_toRightOf="@+id/imageGalleryButton"
-        android:layout_marginLeft="8dp"
         app:layout_constraintHorizontal_bias="1.0"
-       />
+        app:layout_constraintLeft_toRightOf="@+id/imageGalleryButton"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
         android:id="@+id/imageGalleryButton"
         android:layout_width="50dp"
         android:layout_height="40dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:adjustViewBounds="true"
         android:background="@color/colorPrimary"
@@ -54,10 +54,8 @@
         android:onClick="onImageGalleryButtonClicked"
         android:scaleType="fitXY"
         android:src="@drawable/gallery"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginStart="8dp"
         app:layout_constraintLeft_toLeftOf="parent"
-       />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
         android:id="@+id/undo"
@@ -73,7 +71,7 @@
         android:scaleType="fitXY"
         android:src="@drawable/undo"
         app:layout_constraintLeft_toRightOf="@+id/imageGalleryButton"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/imageView"
@@ -92,7 +90,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cameraActivityButton"
         app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@android:color/background_light"/>
+        app:srcCompat="@android:color/background_light" />
 
 
     <ProgressBar
@@ -110,29 +108,28 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
-
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/layoutView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
         android:fillViewport="true"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintLeft_toLeftOf="parent">
+        app:layout_constraintVertical_bias="1.0">
 
         <HorizontalScrollView
             android:id="@+id/menuView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
             android:fillViewport="true"
             android:scrollbars="horizontal"
             android:visibility="invisible"
@@ -167,7 +164,7 @@
                     android:cropToPadding="false"
                     android:onClick="onSaveButtonClicked"
                     android:scaleType="fitXY"
-                    android:src="@drawable/save"/>
+                    android:src="@drawable/save" />
 
                 <ImageButton
                     android:id="@+id/shareButton"
@@ -181,7 +178,7 @@
                     android:cropToPadding="false"
                     android:onClick="onShareButtonClicked"
                     android:scaleType="fitXY"
-                    android:src="@drawable/share"/>
+                    android:src="@drawable/share" />
 
                 <ImageButton
                     android:id="@+id/filtersViewButton"
@@ -195,7 +192,7 @@
                     android:cropToPadding="false"
                     android:onClick="onFiltersViewClicked"
                     android:scaleType="fitXY"
-                    android:src="@drawable/filters_view"/>
+                    android:src="@drawable/filters_view" />
 
                 <ImageButton
                     android:id="@+id/palletViewButton"
@@ -209,7 +206,7 @@
                     android:cropToPadding="false"
                     android:onClick="onPalletViewClicked"
                     android:scaleType="fitXY"
-                    android:src="@drawable/pallet_view"/>
+                    android:src="@drawable/pallet_view" />
 
                 <ImageButton
                     android:id="@+id/brightnessViewButton"
@@ -223,7 +220,7 @@
                     android:cropToPadding="false"
                     android:onClick="onBrightnessViewClicked"
                     android:scaleType="fitXY"
-                    android:src="@drawable/brightness_view"/>
+                    android:src="@drawable/brightness_view" />
 
                 <ImageButton
                     android:id="@+id/flipOrizontallyButton"
@@ -237,7 +234,7 @@
                     android:cropToPadding="false"
                     android:onClick="onFlipHorizontallyClicked"
                     android:scaleType="fitXY"
-                    android:src="@drawable/flip_horizontally"/>
+                    android:src="@drawable/flip_horizontally" />
 
                 <ImageButton
                     android:id="@+id/flipVerticallyButton"
@@ -251,7 +248,7 @@
                     android:cropToPadding="false"
                     android:onClick="onFlipVerticallyClicked"
                     android:scaleType="fitXY"
-                    android:src="@drawable/flip_vertically"/>
+                    android:src="@drawable/flip_vertically" />
 
                 <ImageButton
                     android:id="@+id/rotateLeftButton"
@@ -265,7 +262,7 @@
                     android:cropToPadding="false"
                     android:onClick="onRotateLeftClicked"
                     android:scaleType="fitXY"
-                    android:src="@drawable/rotate_left"/>
+                    android:src="@drawable/rotate_left" />
 
                 <ImageButton
                     android:id="@+id/rotateRightButton"
@@ -279,7 +276,7 @@
                     android:cropToPadding="false"
                     android:onClick="onRotateRightClicked"
                     android:scaleType="fitXY"
-                    android:src="@drawable/rotate_right"/>
+                    android:src="@drawable/rotate_right" />
 
                 <ImageButton
                     android:id="@+id/rotate90LeftButton"
@@ -293,7 +290,7 @@
                     android:cropToPadding="false"
                     android:onClick="onRotate90LeftClicked"
                     android:scaleType="fitXY"
-                    android:src="@drawable/rotate_90_left"/>
+                    android:src="@drawable/rotate_90_left" />
 
                 <ImageButton
                     android:id="@+id/rotate90RightButton"
@@ -307,8 +304,50 @@
                     android:cropToPadding="false"
                     android:onClick="onRotate90RightClicked"
                     android:scaleType="fitXY"
-                    android:src="@drawable/rotate_90_right"/>
+                    android:src="@drawable/rotate_90_right" />
 
+                <ImageButton
+                    android:id="@+id/rippleButton"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:adjustViewBounds="true"
+                    android:background="#00000000"
+                    android:contentDescription="@null"
+                    android:cropToPadding="false"
+                    android:onClick="onRippleClicked"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/ripple" />
+
+                <ImageButton
+                    android:id="@+id/twirlButton"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:adjustViewBounds="true"
+                    android:background="#00000000"
+                    android:contentDescription="@null"
+                    android:cropToPadding="false"
+                    android:onClick="onTwirlClicked"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/twirl" />
+
+
+                <ImageButton
+                    android:id="@+id/sphericalButton"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:adjustViewBounds="true"
+                    android:background="#00000000"
+                    android:contentDescription="@null"
+                    android:cropToPadding="false"
+                    android:onClick="onSphericalClicked"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/spherical" />
             </LinearLayout>
         </HorizontalScrollView>
 
@@ -350,7 +389,7 @@
                     android:cropToPadding="false"
                     android:onClick="onBackToMainMenuClicked"
                     android:scaleType="fitXY"
-                    android:src="@drawable/back"/>
+                    android:src="@drawable/back" />
 
                 <ImageButton
                     android:id="@+id/normalFilterButton"
@@ -364,7 +403,7 @@
                     android:cropToPadding="false"
                     android:onClick="onNormalFilterClicked"
                     android:scaleType="fitXY"
-                    android:src="@drawable/filter_normal"/>
+                    android:src="@drawable/filter_normal" />
 
                 <ImageButton
                     android:id="@+id/hEqYFilterButton"
@@ -378,7 +417,7 @@
                     android:cropToPadding="false"
                     android:onClick="onHEqYFilterClicked"
                     android:scaleType="fitXY"
-                    android:src="@drawable/filter_enchante"/>
+                    android:src="@drawable/filter_enchante" />
 
 
                 <ImageButton
@@ -393,7 +432,7 @@
                     android:cropToPadding="false"
                     android:onClick="onHEqSFilterClicked"
                     android:scaleType="fitXY"
-                    android:src="@drawable/filter_define"/>
+                    android:src="@drawable/filter_define" />
 
                 <ImageButton
                     android:id="@+id/hEqVFilterButton"
@@ -407,7 +446,7 @@
                     android:cropToPadding="false"
                     android:onClick="onHEqVFilterClicked"
                     android:scaleType="fitXY"
-                    android:src="@drawable/filter_emphasize"/>
+                    android:src="@drawable/filter_emphasize" />
 
                 <ImageButton
                     android:id="@+id/redFilterButton"
@@ -421,7 +460,7 @@
                     android:cropToPadding="false"
                     android:onClick="onRedFilterClicked"
                     android:scaleType="fitXY"
-                    android:src="@drawable/filter_red"/>
+                    android:src="@drawable/filter_red" />
 
                 <ImageButton
                     android:id="@+id/greenFilterButton"
@@ -435,7 +474,7 @@
                     android:cropToPadding="false"
                     android:onClick="onGreenFilterClicked"
                     android:scaleType="fitXY"
-                    android:src="@drawable/filter_green"/>
+                    android:src="@drawable/filter_green" />
 
                 <ImageButton
                     android:id="@+id/blueFilterButton"
@@ -449,7 +488,7 @@
                     android:cropToPadding="false"
                     android:onClick="onBlueFilterClicked"
                     android:scaleType="fitXY"
-                    android:src="@drawable/filter_blue"/>
+                    android:src="@drawable/filter_blue" />
 
                 <ImageButton
                     android:id="@+id/magentaFilterButton"
@@ -463,7 +502,7 @@
                     android:cropToPadding="false"
                     android:onClick="onMagentaFilterClicked"
                     android:scaleType="fitXY"
-                    android:src="@drawable/filter_magenta"/>
+                    android:src="@drawable/filter_magenta" />
 
                 <ImageButton
                     android:id="@+id/sketchFilterButton"
@@ -477,7 +516,7 @@
                     android:cropToPadding="false"
                     android:onClick="onSketchFilterClicked"
                     android:scaleType="fitXY"
-                    android:src="@drawable/filter_sketch"/>
+                    android:src="@drawable/filter_sketch" />
 
                 <ImageButton
                     android:id="@+id/cannyFilterButton"
@@ -491,7 +530,8 @@
                     android:cropToPadding="false"
                     android:onClick="onCannyFilterClicked"
                     android:scaleType="fitXY"
-                    android:src="@drawable/filter_canny"/>
+                    android:src="@drawable/filter_canny" />
+
                 <ImageButton
                     android:id="@+id/binaryFilterButton"
                     android:layout_width="60dp"
@@ -504,7 +544,7 @@
                     android:cropToPadding="false"
                     android:onClick="onBinaryFilterClicked"
                     android:scaleType="fitXY"
-                    android:src="@drawable/filter_binary"/>
+                    android:src="@drawable/filter_binary" />
 
                 <ImageButton
                     android:id="@+id/grayFilterButton"
@@ -518,7 +558,7 @@
                     android:cropToPadding="false"
                     android:onClick="onGrayFilterClicked"
                     android:scaleType="fitXY"
-                    android:src="@drawable/filter_gray"/>
+                    android:src="@drawable/filter_gray" />
 
                 <ImageButton
                     android:id="@+id/negativeFilterButton"
@@ -532,7 +572,7 @@
                     android:cropToPadding="false"
                     android:onClick="onNegativeFilterClicked"
                     android:scaleType="fitXY"
-                    android:src="@drawable/filter_negative"/>
+                    android:src="@drawable/filter_negative" />
 
                 <ImageButton
                     android:id="@+id/sepiaFilterButton"
@@ -546,7 +586,7 @@
                     android:cropToPadding="false"
                     android:onClick="onSepiaFilterClicked"
                     android:scaleType="fitXY"
-                    android:src="@drawable/filter_sepia"/>
+                    android:src="@drawable/filter_sepia" />
 
                 <ImageButton
                     android:id="@+id/pinkFilterButton"
@@ -560,7 +600,7 @@
                     android:cropToPadding="false"
                     android:onClick="onPinkFilterClicked"
                     android:scaleType="fitXY"
-                    android:src="@drawable/filter_antique"/>
+                    android:src="@drawable/filter_antique" />
 
                 <ImageButton
                     android:id="@+id/hotFilterButton"
@@ -574,7 +614,7 @@
                     android:cropToPadding="false"
                     android:onClick="onHotFilterClicked"
                     android:scaleType="fitXY"
-                    android:src="@drawable/filter_warm"/>
+                    android:src="@drawable/filter_warm" />
 
                 <ImageButton
                     android:id="@+id/boneFilterButton"
@@ -588,7 +628,7 @@
                     android:cropToPadding="false"
                     android:onClick="onBoneFilterClicked"
                     android:scaleType="fitXY"
-                    android:src="@drawable/filter_cold"/>
+                    android:src="@drawable/filter_cold" />
 
                 <ImageButton
                     android:id="@+id/newoceanFilterButton"
@@ -602,7 +642,7 @@
                     android:cropToPadding="false"
                     android:onClick="onOceanFilterClicked"
                     android:scaleType="fitXY"
-                    android:src="@drawable/filter_ocean"/>
+                    android:src="@drawable/filter_ocean" />
 
             </LinearLayout>
         </HorizontalScrollView>
@@ -634,7 +674,7 @@
                 android:scaleType="fitXY"
                 android:src="@drawable/back"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <SeekBar
                 android:id="@+id/redBar"
@@ -647,7 +687,7 @@
                 android:progressTint="@android:color/holo_red_dark"
                 android:thumbTint="@android:color/holo_red_dark"
                 app:layout_constraintLeft_toRightOf="@+id/backFromPalletView"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <SeekBar
                 android:id="@+id/greenBar"
@@ -662,7 +702,7 @@
                 app:layout_constraintLeft_toRightOf="@+id/backFromPalletView"
                 app:layout_constraintTop_toBottomOf="@+id/redBar"
                 tools:thumbTint="@android:color/holo_green_dark"
-                tools:tickMark="@android:color/holo_green_dark"/>
+                tools:tickMark="@android:color/holo_green_dark" />
 
             <SeekBar
                 android:id="@+id/blueBar"
@@ -680,7 +720,7 @@
                 app:layout_constraintLeft_toRightOf="@+id/backFromPalletView"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/greenBar"
-                app:layout_constraintVertical_bias="0.0"/>
+                app:layout_constraintVertical_bias="0.0" />
 
             <TextView
                 android:id="@+id/redValue"
@@ -695,7 +735,7 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintLeft_toRightOf="@+id/redBar"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/blueValue"
@@ -711,7 +751,7 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintLeft_toRightOf="@+id/blueBar"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/greenValue"/>
+                app:layout_constraintTop_toBottomOf="@+id/greenValue" />
 
             <TextView
                 android:id="@+id/greenValue"
@@ -726,9 +766,7 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintLeft_toRightOf="@+id/greenBar"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/redValue"/>
-
-
+                app:layout_constraintTop_toBottomOf="@+id/redValue" />
         </android.support.constraint.ConstraintLayout>
 
         <android.support.constraint.ConstraintLayout
@@ -742,7 +780,7 @@
             android:layout_marginTop="8dp"
             android:fillViewport="true"
             android:scrollbars="horizontal"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -765,7 +803,7 @@
                 android:src="@drawable/back"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <SeekBar
                 android:id="@+id/brightnessBar"
@@ -778,18 +816,164 @@
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="8dp"
                 android:backgroundTint="@android:color/black"
-                android:splitTrack="false"
                 android:rotation="180"
+                android:splitTrack="false"
                 android:thumbTint="@android:color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintLeft_toRightOf="@+id/backFromBrightnessView"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0"/>
+                app:layout_constraintVertical_bias="0.0" />
 
 
         </android.support.constraint.ConstraintLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/twirlView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:fillViewport="true"
+            android:scrollbars="horizontal"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0">
+
+            <ImageButton
+                android:id="@+id/backFromTwirlView"
+                android:layout_width="35dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="8dp"
+                android:adjustViewBounds="true"
+                android:background="#00000000"
+                android:contentDescription="@null"
+                android:cropToPadding="false"
+                android:onClick="onBackToMainMenuClicked"
+                android:scaleType="fitXY"
+                android:src="@drawable/back"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <SeekBar
+                android:id="@+id/alphaBar"
+                android:layout_width="250dp"
+                android:layout_height="23dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:backgroundTint="#000000"
+                android:max="24"
+                android:progressTint="#000000"
+                android:thumbTint="#000000"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/textView"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <SeekBar
+                android:id="@+id/radiusBar"
+                android:layout_width="250dp"
+                android:layout_height="23dp"
+                android:backgroundTint="#000000"
+                android:max="10"
+                android:progressTint="#000000"
+                android:thumbTint="#000000"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/textView3"
+                app:layout_constraintTop_toBottomOf="@+id/alphaBar"
+                tools:thumbTint="#000000"
+                tools:tickMark="#000000" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="45dp"
+                android:layout_height="17dp"
+                android:layout_marginStart="8dp"
+                android:text="Alpha"
+                android:textColor="#000000"
+                android:textColorLink="#000000"
+                app:layout_constraintStart_toEndOf="@+id/backFromTwirlView"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="45dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="4dp"
+                android:text="Radius"
+                android:textColor="#000000"
+                android:textColorLink="#000000"
+                app:layout_constraintStart_toEndOf="@+id/backFromTwirlView"
+                app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/sphericalView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:fillViewport="true"
+            android:scrollbars="horizontal"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0">
+
+            <ImageButton
+                android:id="@+id/backFromSphericalView"
+                android:layout_width="35dp"
+                android:layout_height="30dp"
+                android:adjustViewBounds="true"
+                android:background="#00000000"
+                android:contentDescription="@null"
+                android:cropToPadding="false"
+                android:onClick="onBackToMainMenuClicked"
+                android:scaleType="fitXY"
+                android:src="@drawable/back"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <SeekBar
+                android:id="@+id/radiusSphericalBar"
+                android:layout_width="250dp"
+                android:layout_height="20dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="8dp"
+                android:backgroundTint="#000000"
+                android:max="10"
+                android:progressTint="#000000"
+                android:thumbTint="#000000"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@+id/textView4"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:thumbTint="#000000"
+                tools:tickMark="#000000" />
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="45dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="8dp"
+                android:text="Radius"
+                android:textColor="#000000"
+                android:textColorLink="#000000"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/backFromSphericalView"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+        </android.support.constraint.ConstraintLayout>
+
 
     </android.support.constraint.ConstraintLayout>
 

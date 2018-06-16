@@ -6,47 +6,52 @@ import org.opencv.imgproc.Imgproc;
 
 public class MyImageProcessing {
 
-
     static {
         System.loadLibrary("MyOpencvLibs");
     }
 
-    public static native void changeRGBChannels(long addrRgba, long addrResultImage, int red, int green, int blue);
+    private static native void changeRGBChannels(long addrRgba, long addrResultImage, int red, int green, int blue);
 
-    public static native void gammaCorrection(long addrRgba, long addrResultImage, float gamma);
-
-
-    public static native void negativeFilter(long addrRgba, long addrResultImagea);
-
-    public static native void binaryFilter(long addrRgba, long addrResultImagea);
-
-    public static native void sepiaFilter(long addrRgba, long addrResultImage);
-
-    public static native void sketchFilter(long addrRgba, long addrResultImage);
-
-    public static native void colorMapFilter(long addrRgba, long addrResultImage, int colorMapName);
+    private static native void gammaCorrection(long addrRgba, long addrResultImage, float gamma);
 
 
+    private static native void negativeFilter(long addrRgba, long addrResultImagea);
 
-    public static native void histogramEqualizationYCbCr(long addrRgba, long addrResultImage, int channel);
+    private static native void binaryFilter(long addrRgba, long addrResultImagea);
 
-    public static native void histogramEqualizationHSV(long addrRgba, long addrResultImage, int channel);
+    private static native void sepiaFilter(long addrRgba, long addrResultImage);
+
+    private static native void sketchFilter(long addrRgba, long addrResultImage);
+
+    private static native void colorMapFilter(long addrRgba, long addrResultImage, int colorMapName);
 
 
 
-    public static native void redTonedFilter(long addrRgba, long addrResultImage, double alpha);
+    private static native void histogramEqualizationYCbCr(long addrRgba, long addrResultImage, int channel);
 
-    public static native void greenTonedFilter(long addrRgba, long addrResultImage, double alpha);
-
-    public static native void blueTonedFilter(long addrRgba, long addrResultImage, double alpha);
+    private static native void histogramEqualizationHSV(long addrRgba, long addrResultImage, int channel);
 
 
 
-    public static native void rotate(long addrRgba, long addrResultImage, double alpha);
+    private static native void redTonedFilter(long addrRgba, long addrResultImage, double alpha);
 
-    public static native void flipHorizontally(long addrRgba, long addrResultImage);
+    private static native void greenTonedFilter(long addrRgba, long addrResultImage, double alpha);
 
-    public static native void flipVertically(long addrRgba, long addrResultImage);
+    private static native void blueTonedFilter(long addrRgba, long addrResultImage, double alpha);
+
+
+
+    private static native void rotate(long addrRgba, long addrResultImage, double alpha);
+
+    private static native void flipHorizontally(long addrRgba, long addrResultImage);
+
+    private static native void flipVertically(long addrRgba, long addrResultImage);
+
+    private static native void twirl(long addrRgba, long addrResultImage, double alpha, double rmax);
+
+    private static native void ripple(long addrRgba, long addrResultImage);
+
+    private static native void spherical(long addrRgba, long addrResultImage,double rmax, double p);
 
 
 
@@ -150,5 +155,39 @@ public class MyImageProcessing {
         return resultImage;
     }
 
+    public static Mat twirlImage(Mat image, float alpha,int rmax) {
+
+        Mat resultImage;
+        resultImage = new Mat(image.height(), image.width(), CvType.CV_8UC4);
+        double alphaDouble = ((double) alpha);
+        double radius;
+        if(image.height()>image.width())
+            radius =(double)(image.width()/20.0) * rmax;
+        else
+            radius =(double)(image.height()/20.0) * rmax;
+        twirl(image.getNativeObjAddr(), resultImage.getNativeObjAddr(), alphaDouble,radius);
+        return resultImage;
+    }
+
+    public static Mat rippleImage(Mat image) {
+
+        Mat resultImage;
+        resultImage = new Mat(image.height(), image.width(), CvType.CV_8UC4);
+        ripple(image.getNativeObjAddr(), resultImage.getNativeObjAddr());
+        return resultImage;
+    }
+
+    public static Mat sphericalImage(Mat image,int rmax) {
+
+        Mat resultImage;
+        resultImage = new Mat(image.height(), image.width(), CvType.CV_8UC4);
+        double radius;
+        if(image.height()>image.width())
+            radius =(image.width()/20.0) * rmax;
+        else
+            radius =(image.height()/20.0) * rmax;
+        spherical(image.getNativeObjAddr(), resultImage.getNativeObjAddr(), radius, 1.8f);
+        return resultImage;
+    }
 
 }

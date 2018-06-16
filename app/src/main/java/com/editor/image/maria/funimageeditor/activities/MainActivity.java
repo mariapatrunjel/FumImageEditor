@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.editor.image.maria.funimageeditor.retained.fragments.EditViewRetainedFragment;
 import com.editor.image.maria.funimageeditor.utils.ColorTransform;
 import com.editor.image.maria.funimageeditor.utils.GeometricTransform;
+import com.editor.image.maria.funimageeditor.utils.ImageSaver;
 import com.editor.image.maria.funimageeditor.utils.Modifier;
 import com.editor.image.maria.funimageeditor.utils.ModifiersList;
 import com.editor.image.maria.funimageeditor.utils.MyImageProcessing;
@@ -52,13 +53,16 @@ public class MainActivity extends Activity {
     private Bitmap initialImage;
     private Bitmap newImage;
     private String currentView = "Disable";
-
     private String currentFilter = "Normal";
+
     private Integer redValue=0, greenValue = 0,blueValue = 0;
     private Float brightness = 1.0f;
-
     private Float rotation = 0.0f;
     private Boolean flippedVertically = false, flippedHorizontally = false;
+    private Float twirledAlpha = 0.0f;
+    private Integer twirledRadius = 0;
+    private Boolean rippled = false;
+    private Integer sphericalRadius = 0;
 
     private static final String TAG_RETAINED_FRAGMENT = "EditViewRetainedFragment";
     private EditViewRetainedFragment mRetainedFragment;
@@ -175,51 +179,12 @@ public class MainActivity extends Activity {
 
     }
 
-    // Proceseaza poza primita de la camera
-    private void processIntentData(){
-        Intent intent = getIntent();
-        if(intent!=null) {
-            Photo photo = Photo.getInstance();
-            initialImage = photo.getImage();
-            mRetainedFragment.setInitialImage(initialImage);
-            currentImage = initialImage.copy(Bitmap.Config.ARGB_8888, true);
-            mRetainedFragment.setImage(currentImage);
-
-            ImageView imgPicture = findViewById(R.id.imageView);
-            imgPicture.setImageBitmap(currentImage);
-            setShareFacebook(currentImage);
-            newImage = currentImage;
-
-            ImageButton undo = findViewById(R.id.undo);
-            undo.setVisibility(View.GONE);
-
-            resetModifiers();
-            modifierList.reset();
-
-            changeView();
-            changeSeekBars();
-            setSeekBarsListeners();
-            setImageViewOnTouchListener();
-
-        }
-        else {
-            initialImage = mRetainedFragment.getInitialImage();
-            currentImage = mRetainedFragment.getImage();
-            changeTransformedPicture();
-            changeView();
-        }
-    }
-
-
-    // Menu
-
     // Salvare
     public void onSaveButtonClicked(View view) {
-        com.editor.image.maria.funimageeditor.utils.Utils.saveImage(this,newImage);
+        ImageSaver.saveImage(this,newImage);
         Toast toast = Toast.makeText(this, "Image saved", Toast.LENGTH_SHORT);
         toast.show();
     }
-
 
     // Share
     public void onShareButtonClicked(View view) {
@@ -237,36 +202,12 @@ public class MainActivity extends Activity {
 
     }
 
-    private Uri getImageUri(Context inContext, Bitmap inImage) {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-
-        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
-        return Uri.parse(path);
-    }
-
-
-
     // Apasare menu filters
     public void onFiltersViewClicked(View view){
         currentView = "FiltersView";
         mRetainedFragment.setMenuView(currentView);
         changeView();
     }
-
-    // Schimbarea unui filtru
-    private void changeFilter(String filterName){
-        currentFilter = filterName;
-        mRetainedFragment.setFilter(currentFilter);
-
-        changeModifiedPicture();
-
-        modifierList.insert(new Modifier("Filter",filterName));
-        ImageButton undo = findViewById(R.id.undo);
-        undo.setVisibility(View.VISIBLE);
-
-    }
-
 
     // Apasare menu culori
     public void onPalletViewClicked(View view){
@@ -282,50 +223,12 @@ public class MainActivity extends Activity {
         changeView();
     }
 
-
     // Apasare back din orice menu
     public void onBackToMainMenuClicked(View view){
         currentView = "MenuView";
         mRetainedFragment.setMenuView(currentView);
         changeView();
     }
-
-
-    // Schimbare view de la menu
-    private void changeView(){
-        currentView = mRetainedFragment.getMenuView();
-
-        HorizontalScrollView menuView = findViewById(R.id.menuView);
-        HorizontalScrollView filtersView = findViewById(R.id.filtersView);
-        ConstraintLayout palletView = findViewById(R.id.palletView);
-        ConstraintLayout brightnessView = findViewById(R.id.brightnessView);
-
-        menuView.setVisibility(View.INVISIBLE);
-        filtersView.setVisibility(View.GONE);
-        palletView.setVisibility(View.GONE);
-        brightnessView.setVisibility(View.GONE);
-
-
-        switch (currentView) {
-            case "FiltersView":
-                filtersView.setVisibility(View.VISIBLE);
-                break;
-            case "PalletView":
-                palletView.setVisibility(View.VISIBLE);
-                break;
-            case "BrightnessView":
-                brightnessView.setVisibility(View.VISIBLE);
-                break;
-            case "MenuView":
-                menuView.setVisibility(View.VISIBLE);
-                break;
-            default:
-                break;
-
-        }
-
-    }
-
 
     //Apasare flip vertical
     public void onFlipVerticallyClicked(View view) {
@@ -383,32 +286,28 @@ public class MainActivity extends Activity {
         changeRotate();
     }
 
-    private void changeRotate(){
-        mRetainedFragment.setRotation(rotation);
+    //Apasare menu twirl
+    public void onTwirlClicked(View view) {
+        currentView = "TwirlView";
+        mRetainedFragment.setMenuView(currentView);
+        changeView();
+    }
+    //Apasare menu twirl
+    public void onRippleClicked(View view) {
+        rippled = !rippled;
+        mRetainedFragment.setRippled(rippled);
 
         changeTransformedPicture();
 
-        modifierList.insert(new Modifier("Rotation",rotation.toString()));
+        modifierList.insert(new Modifier("Rippled",rippled.toString()));
         ImageButton undo = findViewById(R.id.undo);
         undo.setVisibility(View.VISIBLE);
     }
-
-
-
-    //Facebook Share
-    private void setShareFacebook(Bitmap image){
-        SharePhoto photo = new SharePhoto.Builder()
-                .setBitmap(image)
-                .build();
-        SharePhotoContent content = new SharePhotoContent.Builder()
-                .addPhoto(photo)
-                .build();
-
-        ShareButton shareButton = findViewById(R.id.fb_share_button);
-        shareButton.setShareContent(content);
+    public void onSphericalClicked(View view) {
+        currentView = "SphericalView";
+        mRetainedFragment.setMenuView(currentView);
+        changeView();
     }
-
-
     // Undo
     public void onUndoClicked(View view){
         if(!modifierList.isEmpty()){
@@ -419,6 +318,11 @@ public class MainActivity extends Activity {
                 rotation = geometricTransform.getRotation();
                 flippedHorizontally = geometricTransform.getFlippedHorizontally();
                 flippedVertically = geometricTransform.getFlippedVertically();
+                twirledAlpha = geometricTransform.getTwirledAlpha();
+                twirledRadius = geometricTransform.getTwirledRadius();
+                rippled = geometricTransform.getRippled();
+                sphericalRadius = geometricTransform.getSphericalRadius();
+
                 setModifiers();
                 changeTransformedPicture();
             }
@@ -442,17 +346,6 @@ public class MainActivity extends Activity {
             undo.setVisibility(View.GONE);
         }
     }
-    // Scimba poza
-    private void changeModifiedPicture(){
-        if(currentImage!=null)
-            new ModifyImage().execute(currentFilter,redValue.toString(),greenValue.toString(),blueValue.toString(),brightness.toString());
-    }
-    // Transforma poza
-    private void changeTransformedPicture(){
-        if(initialImage!=null)
-            new TransformImage().execute(rotation.toString(),flippedVertically.toString(),flippedHorizontally.toString());
-    }
-
 
 
     // Schimbarea modificatorilor
@@ -471,6 +364,11 @@ public class MainActivity extends Activity {
         mRetainedFragment.setRotation(rotation);
         mRetainedFragment.setFlippedHorizontally(flippedHorizontally);
         mRetainedFragment.setFlippedVertically(flippedVertically);
+        mRetainedFragment.setTwirledAlpha(twirledAlpha);
+        mRetainedFragment.setTwirledRadius(twirledRadius);
+        mRetainedFragment.setRippled(rippled);
+        mRetainedFragment.setSphericalRadius(sphericalRadius);
+
     }
 
     private void getModifiers(){
@@ -488,6 +386,10 @@ public class MainActivity extends Activity {
         rotation = mRetainedFragment.getRotation();
         flippedVertically = mRetainedFragment.getFlippedVertically();
         flippedHorizontally = mRetainedFragment.getFlippedHorizontally();
+        twirledAlpha = mRetainedFragment.getTwirledAlpha();
+        twirledRadius = mRetainedFragment.getTwirledRadius();
+        rippled = mRetainedFragment.getRippled();
+        sphericalRadius = mRetainedFragment.getSphericalRadius();
     }
 
     private void resetModifiers(){
@@ -500,6 +402,10 @@ public class MainActivity extends Activity {
         rotation = 0.0f;
         flippedHorizontally = false;
         flippedVertically = false;
+        twirledAlpha = 0.0f;
+        twirledRadius = 0;
+        rippled = false;
+        sphericalRadius = 0;
 
         mRetainedFragment.setFilter(currentFilter);
         mRetainedFragment.setRedValue(redValue);
@@ -508,25 +414,107 @@ public class MainActivity extends Activity {
         mRetainedFragment.setBrightness(brightness);
 
         mRetainedFragment.setMenuView(currentView);
-
         mRetainedFragment.setRotation(rotation);
         mRetainedFragment.setFlippedHorizontally(flippedHorizontally);
         mRetainedFragment.setFlippedVertically(flippedVertically);
+        mRetainedFragment.setTwirledAlpha(twirledAlpha);
+        mRetainedFragment.setTwirledRadius(twirledRadius);
+        mRetainedFragment.setRippled(rippled);
+        mRetainedFragment.setSphericalRadius(sphericalRadius);
     }
 
+    // Scimba poza
+    private void changeModifiedPicture(){
+        if(currentImage!=null)
+            new ModifyImage().execute(currentFilter,redValue.toString(),greenValue.toString(),blueValue.toString(),brightness.toString());
+    }
+    // Transforma poza
+    private void changeTransformedPicture(){
+        if(initialImage!=null)
+            new TransformImage().execute(rotation.toString(),flippedVertically.toString(),flippedHorizontally.toString(),twirledAlpha.toString(), twirledRadius.toString(),rippled.toString(),sphericalRadius.toString());
+    }
 
+    // Schimbarea unui filtru
+    private void changeFilter(String filterName){
+        currentFilter = filterName;
+        mRetainedFragment.setFilter(currentFilter);
+
+        changeModifiedPicture();
+
+        modifierList.insert(new Modifier("Filter",filterName));
+        ImageButton undo = findViewById(R.id.undo);
+        undo.setVisibility(View.VISIBLE);
+
+    }
+
+    private void changeRotate(){
+        mRetainedFragment.setRotation(rotation);
+
+        changeTransformedPicture();
+
+        modifierList.insert(new Modifier("Rotation",rotation.toString()));
+        ImageButton undo = findViewById(R.id.undo);
+        undo.setVisibility(View.VISIBLE);
+    }
+
+    // Schimbare view de la menu
+    private void changeView(){
+        currentView = mRetainedFragment.getMenuView();
+
+        HorizontalScrollView menuView = findViewById(R.id.menuView);
+        HorizontalScrollView filtersView = findViewById(R.id.filtersView);
+        ConstraintLayout palletView = findViewById(R.id.palletView);
+        ConstraintLayout brightnessView = findViewById(R.id.brightnessView);
+        ConstraintLayout twirlView = findViewById(R.id.twirlView);
+        ConstraintLayout sphericalView = findViewById(R.id.sphericalView);
+        menuView.setVisibility(View.INVISIBLE);
+        filtersView.setVisibility(View.GONE);
+        palletView.setVisibility(View.GONE);
+        brightnessView.setVisibility(View.GONE);
+        twirlView.setVisibility(View.GONE);
+        sphericalView.setVisibility(View.GONE);
+        switch (currentView) {
+            case "FiltersView":
+                filtersView.setVisibility(View.VISIBLE);
+                break;
+            case "PalletView":
+                palletView.setVisibility(View.VISIBLE);
+                break;
+            case "BrightnessView":
+                brightnessView.setVisibility(View.VISIBLE);
+                break;
+            case "MenuView":
+                menuView.setVisibility(View.VISIBLE);
+                break;
+            case "TwirlView":
+                twirlView.setVisibility(View.VISIBLE);
+                break;
+            case "SphericalView":
+                sphericalView.setVisibility(View.VISIBLE);
+                break;
+            default:
+                break;
+
+        }
+
+    }
     // Schimbare seekbars
     private void changeSeekBars(){
        SeekBar redBar = findViewById(R.id.redBar);
        SeekBar greenBar = findViewById(R.id.greenBar);
        SeekBar blueBar = findViewById(R.id.blueBar);
        SeekBar brightnessBar = findViewById(R.id.brightnessBar);
+       SeekBar alphaBar = findViewById(R.id.alphaBar);
+       SeekBar radiusBar = findViewById(R.id.radiusBar);
+       SeekBar radiusSphericalBar = findViewById(R.id.radiusSphericalBar);
 
        redBar.setProgress(redValue/10+25);
        greenBar.setProgress(greenValue/10+25);
        blueBar.setProgress(blueValue/10+25);
-
        brightnessBar.setProgress((int)((brightness+0.1)*10));
+       alphaBar.setProgress((int)((twirledAlpha + 180.0f)/15.0f));
+       radiusBar.setProgress(twirledRadius);
+       radiusSphericalBar.setProgress(sphericalRadius);
 
        TextView red = findViewById(R.id.redValue);
        TextView green = findViewById(R.id.greenValue);
@@ -537,13 +525,28 @@ public class MainActivity extends Activity {
        blue.setText(String.format(Locale.ENGLISH,"%d",blueValue));
     }
 
+    //Facebook Share
+    private void setShareFacebook(Bitmap image){
+        SharePhoto photo = new SharePhoto.Builder()
+                .setBitmap(image)
+                .build();
+        SharePhotoContent content = new SharePhotoContent.Builder()
+                .addPhoto(photo)
+                .build();
+
+        ShareButton shareButton = findViewById(R.id.fb_share_button);
+        shareButton.setShareContent(content);
+    }
     // Setare seekbars listeners
     private void setSeekBarsListeners(){
 
         SeekBar redBar = findViewById(R.id.redBar);
         SeekBar greenBar = findViewById(R.id.greenBar);
         SeekBar blueBar = findViewById(R.id.blueBar);
-        final SeekBar brightnessBar = findViewById(R.id.brightnessBar);
+        SeekBar brightnessBar = findViewById(R.id.brightnessBar);
+        SeekBar alphaBar = findViewById(R.id.alphaBar);
+        SeekBar radiusBar = findViewById(R.id.radiusBar);
+        SeekBar radiusSphericalBar = findViewById(R.id.radiusSphericalBar);
 
         redBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
@@ -629,6 +632,63 @@ public class MainActivity extends Activity {
             }
         });
 
+        alphaBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                twirledAlpha = 15 * progress - 180.0f;
+                mRetainedFragment.setTwirledAlpha(twirledAlpha);
+            }
+
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                // TODO Auto-generated method stub
+            }
+
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                modifierList.insert(new Modifier("TwirledAlpha",twirledAlpha.toString()));
+                ImageButton undo = findViewById(R.id.undo);
+                undo.setVisibility(View.VISIBLE);
+                changeTransformedPicture();
+            }
+        });
+
+        radiusBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                twirledRadius = progress;
+                mRetainedFragment.setTwirledRadius(twirledRadius);
+            }
+
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                // TODO Auto-generated method stub
+            }
+
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                modifierList.insert(new Modifier("TwirledRadius",twirledRadius.toString()));
+                ImageButton undo = findViewById(R.id.undo);
+                undo.setVisibility(View.VISIBLE);
+                changeTransformedPicture();
+            }
+        });
+
+        radiusSphericalBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                sphericalRadius = progress;
+                mRetainedFragment.setSphericalRadius(sphericalRadius);
+            }
+
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                // TODO Auto-generated method stub
+            }
+
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                modifierList.insert(new Modifier("SphericalRadius",sphericalRadius.toString()));
+                ImageButton undo = findViewById(R.id.undo);
+                undo.setVisibility(View.VISIBLE);
+                changeTransformedPicture();
+            }
+        });
+
 
     }
 
@@ -656,6 +716,48 @@ public class MainActivity extends Activity {
                  return false;
             }
       });
+    }
+
+    private Uri getImageUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
+    }
+    // Proceseaza poza primita de la camera
+    private void processIntentData(){
+        Intent intent = getIntent();
+        if(intent!=null) {
+            Photo photo = Photo.getInstance();
+            initialImage = photo.getImage();
+            mRetainedFragment.setInitialImage(initialImage);
+            currentImage = initialImage.copy(Bitmap.Config.ARGB_8888, true);
+            mRetainedFragment.setImage(currentImage);
+
+            ImageView imgPicture = findViewById(R.id.imageView);
+            imgPicture.setImageBitmap(currentImage);
+            setShareFacebook(currentImage);
+            newImage = currentImage;
+
+            ImageButton undo = findViewById(R.id.undo);
+            undo.setVisibility(View.GONE);
+
+            resetModifiers();
+            modifierList.reset();
+
+            changeView();
+            changeSeekBars();
+            setSeekBarsListeners();
+            setImageViewOnTouchListener();
+
+        }
+        else {
+            initialImage = mRetainedFragment.getInitialImage();
+            currentImage = mRetainedFragment.getImage();
+            changeTransformedPicture();
+            changeView();
+        }
     }
 
 
@@ -709,7 +811,7 @@ public class MainActivity extends Activity {
     private class TransformImage extends AsyncTask<String,Integer,Bitmap> {
         @Override
         protected Bitmap doInBackground( String... params) {
-            return getTransformedImage(  Float.parseFloat(params[0]),Boolean.parseBoolean(params[1]),Boolean.parseBoolean(params[2]));
+            return getTransformedImage( Float.parseFloat(params[0]),Boolean.parseBoolean(params[1]),Boolean.parseBoolean(params[2]),Float.parseFloat(params[3]),Integer.parseInt(params[4]),Boolean.parseBoolean(params[5]),Integer.parseInt(params[6]));
         }
 
         @Override
@@ -734,7 +836,7 @@ public class MainActivity extends Activity {
     }
 
     // Functia de transformare geometrica a imaginii apelata de thread
-    private Bitmap getTransformedImage(float rotation , boolean flippedVertically , boolean flippedHorizontally) {
+    private Bitmap getTransformedImage(float rotation , boolean flippedVertically , boolean flippedHorizontally,float twirledAlpha,int twirledRadius,Boolean rippled,int sphericalRadius) {
         if(initialImage != null) {
             if (initialImage != null) {
                 // convert Bitmap to Mat
@@ -752,6 +854,13 @@ public class MainActivity extends Activity {
                 if (flippedHorizontally)
                     MyImageProcessing.flipImageHorizontally(mRgba).copyTo(mRgba);
 
+
+                if (twirledAlpha != 0.0f || twirledRadius != 0)
+                    MyImageProcessing.twirlImage(mRgba,twirledAlpha,twirledRadius).copyTo(mRgba);
+                if (rippled)
+                    MyImageProcessing.rippleImage(mRgba).copyTo(mRgba);
+                if(sphericalRadius != 0)
+                    MyImageProcessing.sphericalImage(mRgba,sphericalRadius).copyTo(mRgba);
                 // convert Mat to Bitmap
                 Bitmap modifiedImage = (Bitmap.createBitmap(mRgba.cols(), mRgba.rows(), Bitmap.Config.ARGB_8888));
                 Utils.matToBitmap(mRgba, modifiedImage);

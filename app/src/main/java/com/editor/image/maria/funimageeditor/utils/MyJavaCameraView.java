@@ -2,8 +2,10 @@ package  com.editor.image.maria.funimageeditor.utils;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.hardware.Camera;
 import android.media.MediaActionSound;
 import android.util.AttributeSet;
@@ -53,12 +55,13 @@ public class MyJavaCameraView extends JavaCameraView{
         // ex. ascending or descending order.
         int position = sizes.size()-1;
 
-        mFrameWidth = (int) sizes.get(position).width;
-        mFrameHeight = (int) sizes.get(position).height;
+        mFrameWidth = sizes.get(position).width;
+        mFrameHeight = sizes.get(position).height;
 
         params.setPictureSize(mFrameWidth, mFrameHeight);
-        mCamera.setParameters(params); // mCamera is a Camera object
+        mCamera.setParameters(params); // mCamera is a Camera objectS
     }
+
     public void takePicture(final Context context, final String currentFilter,final int blueValue,final int greenValue,final int redValue,final float brightness,final Integer cameraId) {
         Camera.PictureCallback callback = new Camera.PictureCallback() {
             @Override
@@ -75,12 +78,14 @@ public class MyJavaCameraView extends JavaCameraView{
                 org.opencv.android.Utils.bitmapToMat(bmp32, image);
 
                 //process image
-                if(cameraId == 1)
-                    MyImageProcessing.processImage(MyImageProcessing.flipImageHorizontally(image),currentFilter,redValue, greenValue, blueValue, brightness);
+                if(cameraId == 1) {
+                    image = MyImageProcessing.flipImageHorizontally(image);
+                    MyImageProcessing.processImage(image, currentFilter, redValue, greenValue, blueValue, brightness);
+                }
                 else
                     MyImageProcessing.processImage(image, currentFilter, blueValue, greenValue, redValue, brightness);
 
-                Bitmap finalBitmap = Utils.matToFinalBitmap(image, getResources().getConfiguration().orientation, cameraId);
+                Bitmap finalBitmap = matToFinalBitmap(image, getResources().getConfiguration().orientation, cameraId);
 
                 //Bitmap finalBitmap = Utils.byteToFinalBitmap(data, getResources().getConfiguration().orientation, cameraId);
 
@@ -93,5 +98,25 @@ public class MyJavaCameraView extends JavaCameraView{
         };
 
         mCamera.takePicture(null, null, callback);
+    }
+
+    private Bitmap matToFinalBitmap(Mat image, int orientation , int cameraId){
+        Bitmap finalBitmap = Bitmap.createBitmap(image.width(), image.height(), Bitmap.Config.ARGB_8888);
+        org.opencv.android.Utils.matToBitmap(image, finalBitmap);
+
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            if(cameraId == 0 )
+                finalBitmap = rotateBitmap(finalBitmap, 90);
+            else
+                finalBitmap = rotateBitmap(finalBitmap, -90);
+        }
+
+        return finalBitmap;
+    }
+
+    private Bitmap rotateBitmap(Bitmap source, float angle) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
     }
 }

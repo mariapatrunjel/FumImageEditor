@@ -36,7 +36,6 @@ public class CameraActivity extends Activity implements CameraBridgeViewBase.CvC
     private int cameraId = 0;
     private int flashMode = FLASH_MODE_OFF;
 
-
     private static final String TAG_RETAINED_FRAGMENT = "CameraViewRetainedFragment";
     private CameraViewRetainedFragment mRetainedFragment;
 
@@ -125,7 +124,7 @@ public class CameraActivity extends Activity implements CameraBridgeViewBase.CvC
     @Override
     public void onCameraViewStarted(int width, int height) {
         mRgba = new Mat(height, width, CvType.CV_8UC4);
-        setFlashModeImage();
+        changeFlashMode();
         javaCameraView.setCameraPictureSize();
     }
 
@@ -158,13 +157,13 @@ public class CameraActivity extends Activity implements CameraBridgeViewBase.CvC
 
 
     // Thake Picture
-    public void onTakePicture(View view) {
+    public void onTakePictureClicked(View view) {
         javaCameraView.takePicture(this,currentFilter,redValue,greenValue,blueValue,brightness,cameraId);
     }
 
 
     // Settings activity
-    public void onClickSettingsActivity(View view){
+    public void onSettingsActivityClicked(View view){
         Intent intent = new Intent(this, SettingsActivity.class);
         intent.putExtra("red",redValue);
         intent.putExtra("green",greenValue);
@@ -176,7 +175,7 @@ public class CameraActivity extends Activity implements CameraBridgeViewBase.CvC
 
 
     // Swap Camera
-    public void onSwapCamera(View view) {
+    public void onSwapCameraClicked(View view) {
         cameraId = cameraId^1;
         mRetainedFragment.setCameraId(cameraId);
         ImageButton flashLightButton = findViewById(R.id.flashlight);
@@ -191,29 +190,10 @@ public class CameraActivity extends Activity implements CameraBridgeViewBase.CvC
 
 
     // FlashLight
-    public void onFlashlight(View view) {
+    public void onFlashlightClicked(View view) {
         flashMode  = (flashMode + 1)%3;
         mRetainedFragment.setFlashMode(flashMode);
-        setFlashModeImage();
-    }
-
-    private void setFlashModeImage(){
-        if(cameraId == 0) {
-            flashMode = mRetainedFragment.getFlashMode();
-            ImageButton imageButton = findViewById(R.id.flashlight);
-            if (flashMode == FLASH_MODE_OFF) {
-                javaCameraView.turnTheFlashOff();
-                imageButton.setImageResource(R.drawable.flash_light_off);
-            }
-            if (flashMode == FLASH_MODE_AUTO) {
-                javaCameraView.turnTheFlashAuto();
-                imageButton.setImageResource(R.drawable.flash_light_auto);
-            }
-            if (flashMode == FLASH_MODE_ON) {
-                javaCameraView.turnTheFlashOn();
-                imageButton.setImageResource(R.drawable.flash_light_on);
-            }
-        }
+        changeFlashMode();
     }
 
 
@@ -294,6 +274,24 @@ public class CameraActivity extends Activity implements CameraBridgeViewBase.CvC
     private void changeFilter(String filterName){
         currentFilter = filterName;
         mRetainedFragment.setFilter(currentFilter);
+    }
+    private void changeFlashMode(){
+        if(cameraId == 0) {
+            flashMode = mRetainedFragment.getFlashMode();
+            ImageButton imageButton = findViewById(R.id.flashlight);
+            if (flashMode == FLASH_MODE_OFF) {
+                javaCameraView.turnTheFlashOff();
+                imageButton.setImageResource(R.drawable.flash_light_off);
+            }
+            if (flashMode == FLASH_MODE_AUTO) {
+                javaCameraView.turnTheFlashAuto();
+                imageButton.setImageResource(R.drawable.flash_light_auto);
+            }
+            if (flashMode == FLASH_MODE_ON) {
+                javaCameraView.turnTheFlashOn();
+                imageButton.setImageResource(R.drawable.flash_light_on);
+            }
+        }
     }
 
 

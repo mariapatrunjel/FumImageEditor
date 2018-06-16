@@ -183,7 +183,7 @@
         android:layout_marginStart="131dp"
         android:layout_marginTop="28dp"
         android:background="@color/colorAccent"
-        android:onClick="onClickResetButton"
+        android:onClick="onResetButtonClicked"
         android:text="@string/reset"
         android:textColor="@color/colorPrimary"
         app:layout_constraintLeft_toLeftOf="parent"

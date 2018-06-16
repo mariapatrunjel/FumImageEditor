@@ -17,6 +17,10 @@ public class EditViewRetainedFragment extends Fragment
     private Float rotation = 0.0f;
     private Boolean flippedVertically = false, flippedHorizontally = false;
 
+    private Float twirledAlpha = 0.0f;
+    private Integer twirledRadius = 0;
+    private Boolean rippled = false;
+    private Integer sphericalRadius = 0;
 
 
     // this method is only called once for this fragment
@@ -114,5 +118,37 @@ public class EditViewRetainedFragment extends Fragment
 
     public void setFlippedHorizontally(Boolean flippedHorizontally) {
         this.flippedHorizontally = flippedHorizontally;
+    }
+
+    public Float getTwirledAlpha() {
+        return twirledAlpha;
+    }
+
+    public void setTwirledAlpha(Float twirledAlpha) {
+        this.twirledAlpha = twirledAlpha;
+    }
+
+    public Integer getTwirledRadius() {
+        return twirledRadius;
+    }
+
+    public void setTwirledRadius(Integer twirledRadius) {
+        this.twirledRadius = twirledRadius;
+    }
+
+    public Boolean getRippled() {
+        return rippled;
+    }
+
+    public void setRippled(Boolean rippled) {
+        this.rippled = rippled;
+    }
+
+    public Integer getSphericalRadius() {
+        return sphericalRadius;
+    }
+
+    public void setSphericalRadius(Integer sphericalRadius) {
+        this.sphericalRadius = sphericalRadius;
     }
 }

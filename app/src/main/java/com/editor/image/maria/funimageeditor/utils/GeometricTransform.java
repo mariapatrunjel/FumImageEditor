@@ -4,11 +4,19 @@ public class GeometricTransform {
 
     private Float rotation;
     private Boolean flippedvertically, flippedHorizontally;
+    private Float twirledAlpha;
+    private Integer twirledRadius;
+    private Boolean rippled;
+    private Integer sphericalRadius;
 
-    public GeometricTransform(Float rotation, Boolean flippedVertically, Boolean flippedHorizontally) {
+    public GeometricTransform(Float rotation, Boolean flippedVertically, Boolean flippedHorizontally,Float twirledAlpha,Integer twirledRadius,Boolean rippled,Integer sphericalRadius) {
         this.rotation = rotation;
         this.flippedvertically = flippedVertically;
         this.flippedHorizontally = flippedHorizontally;
+        this.twirledAlpha = twirledAlpha;
+        this.twirledRadius = twirledRadius;
+        this.rippled = rippled;
+        this.sphericalRadius = sphericalRadius;
     }
 
     public Float getRotation() {
@@ -33,5 +41,37 @@ public class GeometricTransform {
 
     public void setFlippedHorizontally(Boolean flippedHorizontally) {
         this.flippedHorizontally = flippedHorizontally;
+    }
+
+    public Float getTwirledAlpha() {
+        return twirledAlpha;
+    }
+
+    public void setTwirledAlpha(Float twirledAlpha) {
+        this.twirledAlpha = twirledAlpha;
+    }
+
+    public Integer getTwirledRadius() {
+        return twirledRadius;
+    }
+
+    public void setTwirledRadius(Integer twirledRadius) {
+        this.twirledRadius = twirledRadius;
+    }
+
+    public Boolean getRippled() {
+        return rippled;
+    }
+
+    public void setRippled(Boolean rippled) {
+        this.rippled = rippled;
+    }
+
+    public Integer getSphericalRadius() {
+        return sphericalRadius;
+    }
+
+    public void setSphericalRadius(Integer sphericalRadius) {
+        this.sphericalRadius = sphericalRadius;
     }
 }
